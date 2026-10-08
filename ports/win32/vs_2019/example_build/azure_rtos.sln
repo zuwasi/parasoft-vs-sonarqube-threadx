@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_threadx", "sample_threadx\sample_threadx.vcxproj", "{7342DEEF-AB3F-00D5-9EDB-2829CD277B76}"
+	ProjectSection(ProjectDependencies) = postProject
+		{51907112-62DA-98D6-7897-5A2FD48B99C3} = {51907112-62DA-98D6-7897-5A2FD48B99C3}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tx", "tx\tx.vcxproj", "{51907112-62DA-98D6-7897-5A2FD48B99C3}"
 EndProject
