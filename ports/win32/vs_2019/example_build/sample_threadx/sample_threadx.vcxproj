@@ -128,9 +128,17 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\common\inc\tx_api.h" />
     <ClInclude Include="..\..\inc\tx_port.h" />
+    <ClInclude Include="harness\harness_common.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sample_threadx.c" />
+    <ClCompile Include="harness\harness_init.c" />
+    <ClCompile Include="harness\harness_sizearith.c" />
+    <ClCompile Include="harness\harness_memory.c" />
+    <ClCompile Include="harness\harness_concurrency.c" />
+    <ClCompile Include="harness\harness_nullpaths.c" />
+    <ClCompile Include="harness\harness_taint.c" />
+    <ClCompile Include="harness\harness_uninit.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
