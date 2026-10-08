@@ -1,0 +1,29 @@
+  █▀ █▀█ █▄ █ ▄▀█ █▀█ █▀█ █ █ █▄▄ █▀▀   ▄█▀ █   █
+  ▄█ █▄█ █ ▀█ █▀█ █▀▄ ▀▀█ █▄█ █▄█ ██▄   ▀█▄ ██▄ █
+  v1.9.0
+Usage: sonar analyze [options] [command]
+
+Analyze code for quality and security issues
+
+Options:
+  --file <path>                 Analyze specific file(s) instead of the git
+                                change set (repeatable)
+  --staged                      Analyze staged files only (git diff --cached)
+  --base <ref>                  Analyze files changed vs a branch or ref (e.g.
+                                main)
+  -p, --project <project>       SonarQube project key (overrides auto-detected
+                                project)
+  --force                       Skip the large change set confirmation prompt
+  --depth <depth>               Analysis depth: STANDARD (fast) or DEEP
+                                (cross-file). Default: STANDARD for one --file;
+                                DEEP otherwise. (choices: "STANDARD", "DEEP")
+  --format <format>             Output format (choices: "text", "json", default:
+                                "text")
+  -h, --help                    display help for command
+
+Commands:
+  secrets [options] [paths...]  Scan files or stdin for hardcoded secrets
+  dependency-risks [options]    Analyze project dependencies for security and
+                                license risks
+  agentic [options]             Run server-side Vortex analysis. Limitations
+                                apply

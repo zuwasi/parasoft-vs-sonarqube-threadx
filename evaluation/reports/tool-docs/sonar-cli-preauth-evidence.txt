@@ -1,0 +1,20 @@
+# SonarQube CLI 1.9.0 pre-authentication observations (verbatim, 2026-10-08)
+
+PS> sonar analyze secrets C:\projects\parasoft-vs-SQ\threadx
+[error] Not authenticated.
+  -> Run 'sonar auth login' to authenticate.
+
+PS> sonar auth status
+No saved connection
+[error] Authentication check failed.
+  -> Run 'sonar auth login' to authenticate.
+
+Finding recorded in SCAN_PROTOCOL.md section 4: on CLI 1.9.0 every `sonar analyze`
+command, including `analyze secrets`, requires prior authentication, despite docs
+describing secrets detection as running locally without a connection.
+
+PS> cpptestcli -list-configs (same session, DTP service stopped)
+License: Unable to connect to License Server. Review License Server settings and the network status.
+License: Activation failed: Unable to connect to License Server
+License: Machine id WIN32-2037c5fc (Default)
+ERROR: License not set - aborting

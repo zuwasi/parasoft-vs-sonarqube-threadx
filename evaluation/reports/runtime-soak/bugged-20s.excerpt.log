@@ -1,0 +1,51 @@
+**** ThreadX Win32 Demonstration **** (c) 1996-2020 Microsoft Corporation
+
+           thread 0 events sent:          1
+           thread 1 messages sent:        0
+           thread 2 messages received:    0
+           thread 3 obtained semaphore:   0
+           thread 4 obtained semaphore:   0
+           thread 5 events received:      0
+           thread 6 mutex obtained:       0
+           thread 7 mutex obtained:       0
+
+**** ThreadX Win32 Demonstration **** (c) 1996-2020 Microsoft Corporation
+
+           thread 0 events sent:          2
+           thread 1 messages sent:        10199
+           thread 2 messages received:    10195
+           thread 3 obtained semaphore:   3
+           thread 4 obtained semaphore:   3
+           thread 5 events received:      1
+           thread 6 mutex obtained:       3
+           thread 7 mutex obtained:       3
+
+**** ThreadX Win32 Demonstration **** (c) 1996-2020 Microsoft Corporation
+
+           thread 0 events sent:          3
+... [middle truncated: 27028 lines total; SHA-256 in SHA256SUMS.txt] ...
+           thread 7 mutex obtained:       6133
+
+**** ThreadX Win32 Demonstration **** (c) 1996-2020 Microsoft Corporation
+
+           thread 0 events sent:          2456
+           thread 1 messages sent:        54912774
+           thread 2 messages received:    54912673
+           thread 3 obtained semaphore:   6136
+           thread 4 obtained semaphore:   6135
+           thread 5 events received:      2455
+           thread 6 mutex obtained:       6136
+           thread 7 mutex obtained:       6135
+
+**** ThreadX Win32 Demonstration **** (c) 1996-2020 Microsoft Corporation
+
+           thread 0 events sent:          2457
+           thread 1 messages sent:        54934092
+           thread 2 messages received:    54934093
+           thread 3 obtained semaphore:   6138
+           thread 4 obtained semaphore:   6138
+           thread 5 events received:      2456
+           thread 6 mutex obtained:       6138
+           thread 7 mutex obtained:       6138
+
+**** ThreadX Win32 Demonstration **** (c) 1996-2020 Microsoft Corporati

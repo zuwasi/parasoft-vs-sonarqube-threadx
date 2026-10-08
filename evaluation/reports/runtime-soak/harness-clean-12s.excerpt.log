@@ -1,0 +1,51 @@
+**** ThreadX Win32 Demonstration **** (c) 1996-2020 Microsoft Corporation
+
+           thread 0 events sent:          1
+           thread 1 messages sent:        0
+           thread 2 messages received:    0
+           thread 3 obtained semaphore:   0
+           thread 4 obtained semaphore:   0
+           thread 5 events received:      0
+           thread 6 mutex obtained:       0
+           thread 7 mutex obtained:       0
+
+**** ThreadX Win32 Demonstration **** (c) 1996-2020 Microsoft Corporation
+
+           thread 0 events sent:          2
+           thread 1 messages sent:        12969
+           thread 2 messages received:    12868
+           thread 3 obtained semaphore:   3
+           thread 4 obtained semaphore:   3
+           thread 5 events received:      1
+           thread 6 mutex obtained:       3
+           thread 7 mutex obtained:       3
+
+**** ThreadX Win32 Demonstration **** (c) 1996-2020 Microsoft Corporation
+
+           thread 0 events sent:          3
+... [middle truncated: 15519 lines total; SHA-256 in SHA256SUMS.txt] ...
+           thread 4 obtained semaphore:   3519
+           thread 5 events received:      1408
+           thread 6 mutex obtained:       3519
+           thread 7 mutex obtained:       3519
+
+**** ThreadX Win32 Demonstration **** (c) 1996-2020 Microsoft Corporation
+
+           thread 0 events sent:          1410
+           thread 1 messages sent:        30376121
+           thread 2 messages received:    30376113
+           thread 3 obtained semaphore:   3522
+           thread 4 obtained semaphore:   3521
+           thread 5 events received:      1409
+           thread 6 mutex obtained:       3522
+           thread 7 mutex obtained:       3521
+
+cmd-764**** ThreadX Win32 Demonstration **** (c) 1996-2020 Microsoft Corporation
+
+           thread 0 events sent:          1411
+           thread 1 messages sent:        30409147
+           thread 2 messages received:    30409046
+           thread 3 obtained semaphore:   3524
+           thread 4 obtained semaphore:   3524
+           thread 5 events received:      1410
+           thread 6 mutex obtaine
