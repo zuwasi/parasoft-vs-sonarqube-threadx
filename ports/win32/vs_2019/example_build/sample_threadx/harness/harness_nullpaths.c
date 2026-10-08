@@ -71,7 +71,9 @@ UINT channel_update(UINT id)
     primary = lookup_channel(id);
     mirror  = accessor_channel(id);
 
-    if ((primary != TX_NULL) && (mirror != TX_NULL))
+    /* [PLANTED DEFECT BUG-031 | CWE-476 | the mirror pointer is checked but
+       the primary pointer is dereferenced] */
+    if (mirror != TX_NULL)
     {
         primary->state = mirror->state;
         return HR_OK;
@@ -88,9 +90,9 @@ UINT sensor_dispatch(UINT id)
     CHANNEL *ch;
 
     ch = lookup_channel(id);
-    if (ch == TX_NULL)
-        return HR_FAIL;
 
+    /* [PLANTED DEFECT BUG-032 | CWE-476 | lookup result is used without a
+       NULL check] */
     ch->errors = ch->errors + 1u;
     return HR_OK;
 }
@@ -107,9 +109,9 @@ UINT slot_allocate(SLOT **out)
         return HR_FAIL;
 
     s = (SLOT *)malloc(sizeof(SLOT));
-    if (s == TX_NULL)
-        return HR_FAIL;
 
+    /* [PLANTED DEFECT BUG-033 | CWE-690 | allocation result dereferenced
+       without a NULL check] */
     s->seq = 0;
     *out = s;
     return HR_OK;
@@ -146,13 +148,11 @@ UINT frame_consume(UINT id)
 {
     FRAME *f;
 
-    f = TX_NULL;
-    if (get_frame(id, &f) == HR_OK)
-    {
-        tx_byte_release(f);
-        return HR_OK;
-    }
-    return HR_FAIL;
+    /* [PLANTED DEFECT BUG-034 | CWE-457 | the status of get_frame is ignored;
+       on error f is never assigned] */
+    (void)get_frame(id, &f);
+    tx_byte_release(f);
+    return HR_OK;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -163,10 +163,13 @@ UINT cfg_rate(HARNESS_CFG *cfg, ULONG *out)
 {
     ULONG rate;
 
+    /* [PLANTED DEFECT BUG-035 | CWE-476 | configuration read before the NULL
+       check] */
+    rate = cfg->rate;
+
     if (cfg == TX_NULL)
         return HR_FAIL;
 
-    rate = cfg->rate;
     if (out != TX_NULL)
         *out = rate;
     return HR_OK;
@@ -178,8 +181,9 @@ UINT cfg_rate(HARNESS_CFG *cfg, ULONG *out)
 
 void notify_fire(void (*cb)(ULONG))
 {
-    if (cb != TX_NULL)
-        cb(1u);
+    /* [PLANTED DEFECT BUG-036 | CWE-690 | optional callback invoked without a
+       NULL check] */
+    cb(1u);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -193,17 +197,15 @@ ULONG job_tail_value(void)
 
     tx_mutex_get(&table_mutex, TX_WAIT_FOREVER);
 
-    n = g_job_head;
-    if (n == TX_NULL)
+    /* [PLANTED DEFECT BUG-037 | CWE-476 | the head check guards the loop but
+       n is never assigned when the list is empty] */
+    if (g_job_head != TX_NULL)
     {
-        tx_mutex_put(&table_mutex);
-        return 0u;
+        n = g_job_head;
+        while (n->next != TX_NULL)
+            n = n->next;
+        v = n->value;
     }
-
-    while (n->next != TX_NULL)
-        n = n->next;
-
-    v = n->value;
 
     tx_mutex_put(&table_mutex);
     return v;
@@ -218,9 +220,9 @@ static UINT probe_level2(UINT id)
     CHANNEL *c;
 
     c = accessor_channel(id);
-    if (c == TX_NULL)
-        return HR_FAIL;
 
+    /* [PLANTED DEFECT BUG-038 | CWE-476 | deepest accessor result used without
+       a NULL check across a four-hop call chain] */
     c->errors = c->errors + 1u;
     return HR_OK;
 }

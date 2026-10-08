@@ -14,12 +14,12 @@
 
 void init_hdr(FRAME_HDR *h)
 {
+    /* [PLANTED DEFECT BUG-049 | CWE-457 | flags and reserved are never
+       initialized by this helper; callers read them] */
     h->magic       = FRAME_HDR_MAGIC;
     h->type        = 0;
-    h->flags       = 0;
     h->seq         = 0;
     h->payload_len = 0;
-    h->reserved    = 0;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -38,7 +38,8 @@ UINT frame_pool_use(void)
     if (status != TX_SUCCESS)
         return HR_FAIL;
 
-    memset(f, 0, sizeof(FRAME));
+    /* [PLANTED DEFECT BUG-047 | CWE-457 | pooled memory read before any
+       initialization: hdr.flags is never set] */
     f->hdr.magic = FRAME_HDR_MAGIC;
     f->hdr.seq = 1;
 
@@ -59,7 +60,9 @@ UINT frame_send_local(void)
 {
     FRAME_HDR h;
 
-    init_hdr(&h);
+    /* [PLANTED DEFECT BUG-048 | CWE-457 | header partially initialized: seq
+       and magic only; flags is read uninitialized] */
+    h.magic = FRAME_HDR_MAGIC;
     h.seq = tx_time_get();
 
     tx_mutex_get(&stats_mutex, TX_WAIT_FOREVER);
@@ -121,12 +124,11 @@ UINT slot_track(void)
 {
     SLOT *u;
 
-    if (get_slot(&u) == HR_OK)
-    {
-        free(u);
-        return HR_OK;
-    }
-    return HR_FAIL;
+    /* [PLANTED DEFECT BUG-050 | CWE-457 | the error contract is ignored: on
+       failure get_slot leaves u untouched] */
+    (void)get_slot(&u);
+    free(u);
+    return HR_OK;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -138,7 +140,9 @@ UINT crc_check(UINT expected)
     ULONG crcs[4];
     UINT  i;
 
-    for (i = 0; i < 4; i++)
+    /* [PLANTED DEFECT BUG-051 | CWE-457 | the fill loop stops one short, so
+       crcs[3] is compared uninitialized] */
+    for (i = 0; i < 3; i++)
         crcs[i] = (ULONG)i * 7u + 1u;
 
     if (crcs[3] == (ULONG)expected)
@@ -160,7 +164,8 @@ UINT stats_track(ULONG v)
     if (st == TX_NULL)
         return HR_FAIL;
 
-    memset(st, 0, sizeof(STATS));
+    /* [PLANTED DEFECT BUG-052 | CWE-457 | snapshot fields read before the
+       struct is zeroed: peak is uninitialized] */
     st->total = v;
 
     if (st->peak > 100u)

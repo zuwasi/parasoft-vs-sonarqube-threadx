@@ -23,16 +23,14 @@ UINT sa_alloc_copy(UINT count)
     UINT16 size;
     UCHAR *p;
 
-    /* count*4 must fit in the UINT16 size word and inside sa_src. */
-    if (count > 31u)
-        return HR_FAIL;
-
+    /* [PLANTED DEFECT BUG-001 | CWE-190/787 | count*4 truncated to UINT16 for
+       the allocation but not for the copy] */
     size = (UINT16)(count * 4u);
     p = (UCHAR *)malloc((size_t)size);
     if (p == TX_NULL)
         return HR_FAIL;
 
-    memcpy(p, sa_src, (size_t)size);
+    memcpy(p, sa_src, (size_t)count * 4u);
     free(p);
     return HR_OK;
 }
@@ -45,10 +43,12 @@ UINT sa_copy_checked(INT n)
 {
     UCHAR dst[64];
 
-    if ((n < 0) || (n > 63))
-        return HR_FAIL;
-
-    memcpy(dst, sa_src, (size_t)n);
+    /* [PLANTED DEFECT BUG-002 | CWE-197 | magnitude check admits negative
+       lengths, which convert to huge size_t] */
+    if ((n < 64) && (n > -64))
+    {
+        memcpy(dst, sa_src, (size_t)n);
+    }
     return HR_OK;
 }
 
@@ -60,8 +60,10 @@ void sa_log_write(UINT16 code)
 {
     UINT idx;
 
+    /* [PLANTED DEFECT BUG-003 | CWE-193 | off-by-one: == LOG_DEPTH passes the
+       bound check and writes one past the ring] */
     idx = (UINT)code >> 3;
-    if (idx < (UINT)LOG_DEPTH)
+    if (idx <= (UINT)LOG_DEPTH)
     {
         log_ring[idx].code  = code;
         log_ring[idx].seq   = (UINT16)(code ^ 0x5Au);
@@ -106,7 +108,9 @@ UINT sa_frame_new(void)
     if (p == TX_NULL)
         return HR_FAIL;
 
-    memcpy(p, &stack_frame, sizeof(FRAME));
+    /* [PLANTED DEFECT BUG-004 | CWE-131 | copies sizeof(pointer), leaving the
+       frame beyond the first 4 bytes uninitialized] */
+    memcpy(p, &stack_frame, sizeof(p));
 
     tx_mutex_get(&stats_mutex, TX_WAIT_FOREVER);
     if ((p->hdr.seq & 0x1u) != 0u)
@@ -126,10 +130,8 @@ UINT sa_pack(UINT16 payload_len)
     ULONG total;
     UCHAR *p;
 
-    /* Guard: total = payload + header(12) + crc(4) must not wrap. */
-    if (payload_len > (UINT16)(FRAME_PAYLOAD_CAP - 16u))
-        return HR_FAIL;
-
+    /* [PLANTED DEFECT BUG-005 | CWE-190 | unguarded total can wrap to a small
+       allocation while the payload copy keeps its full length] */
     total = (ULONG)payload_len + 12u + 4u;
     p = (UCHAR *)malloc((size_t)total);
     if (p == TX_NULL)
@@ -149,12 +151,10 @@ UINT sa_store_len(ULONG msg_len)
     UINT16 stored;
     UCHAR *p;
 
-    /* The UINT16 stored length must represent msg_len exactly. */
-    if (msg_len > 0xFFFFu)
-        return HR_FAIL;
-
+    /* [PLANTED DEFECT BUG-006 | CWE-197 | stored length truncated for the
+       allocation, full msg_len used for the copy] */
     stored = (UINT16)msg_len;
-    p = (UCHAR *)malloc((size_t)stored + 1u);
+    p = (UCHAR *)malloc((size_t)stored);
     if (p == TX_NULL)
         return HR_FAIL;
 
@@ -173,7 +173,9 @@ void sa_table_put(UINT row, INT col, ULONG value)
     UINT r;
     UINT c;
 
-    if ((row >= (UINT)SA_ROWS) || (col < 0) || (col >= (INT)SA_COLS))
+    /* [PLANTED DEFECT BUG-007 | CWE-787 | row+column index not range-checked;
+       negative columns walk below the table] */
+    if (row >= (UINT)SA_ROWS)
         return;
 
     r = row;
@@ -191,7 +193,9 @@ UINT sa_cfg_snapshot(void)
     HARNESS_CFG *cfg;
 
     cfg = &g_cfg;
-    memcpy(&local, cfg, sizeof(local));
+    /* [PLANTED DEFECT BUG-008 | CWE-131 | copies sizeof(pointer) instead of
+       the configuration struct] */
+    memcpy(&local, cfg, sizeof(cfg));
 
     if (local.rate > 1000u)
     {
@@ -224,13 +228,10 @@ UINT sa_pool_resize(UINT nblocks)
     if (status != TX_SUCCESS)
         return HR_FAIL;
 
+    /* [PLANTED DEFECT BUG-009 | CWE-190/690 | wrapped pool arithmetic above can
+       make this allocation fail; the status is not checked] */
     b = TX_NULL;
-    status = tx_byte_allocate(&probe_pool, &b, 64u, TX_NO_WAIT);
-    if (status != TX_SUCCESS)
-    {
-        tx_byte_pool_delete(&probe_pool);
-        return HR_FAIL;
-    }
+    tx_byte_allocate(&probe_pool, &b, 64u, TX_NO_WAIT);
 
     memset(b, 0, 16);
     tx_byte_release(b);
@@ -248,9 +249,10 @@ UINT sa_scan_raw(UINT fill_len)
     UINT  n;
     UINT  i;
 
-    /* Keep at least one byte free for the string terminator. */
-    if (fill_len >= (UINT)sizeof(raw))
-        fill_len = (UINT)sizeof(raw) - 1u;
+    /* [PLANTED DEFECT BUG-010 | CWE-170 | full-length fill leaves no room for
+       the string terminator; strlen then reads past the buffer] */
+    if (fill_len > (UINT)sizeof(raw))
+        fill_len = (UINT)sizeof(raw);
 
     for (i = 0; i < fill_len; i++)
         raw[i] = (UCHAR)('a' + (i & 0xFu));
@@ -271,10 +273,10 @@ UINT sa_masked_copy(ULONG msg_len)
 {
     UCHAR dst[64];
 
-    if (msg_len > 63u)
-        return HR_FAIL;
-
-    memcpy(dst, sa_src, (size_t)msg_len);
+    /* [PLANTED DEFECT BUG-011 | CWE-704 | length checked after masking to
+       16 bits, but the copy uses the full 32-bit length] */
+    if ((msg_len & 0xFFFFu) < 64u)
+        memcpy(dst, sa_src, (size_t)msg_len);
     return HR_OK;
 }
 
@@ -290,10 +292,9 @@ UINT sa_hdr_store(void)
 
     init_hdr(&h);
 
-    /* The pad configuration must cover the serialized header. */
+    /* [PLANTED DEFECT BUG-012 | CWE-190/787 | configured pad size not validated
+       against the serialized header size] */
     size = (UINT)g_hdr_pad;
-    if ((size < (UINT)sizeof(FRAME_HDR)) || (size > 64u))
-        return HR_FAIL;
 
     p = (UCHAR *)malloc((size_t)size);
     if (p == TX_NULL)

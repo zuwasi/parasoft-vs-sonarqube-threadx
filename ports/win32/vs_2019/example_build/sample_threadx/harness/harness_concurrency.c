@@ -34,9 +34,9 @@ void stats_record(ULONG v)
 
 void stats_record_fast(ULONG v)
 {
-    tx_mutex_get(&stats_mutex, TX_WAIT_FOREVER);
+    /* [PLANTED DEFECT BUG-023 | CWE-362 | read-modify-write of shared stats
+       without holding stats_mutex] */
     g_stats.total = g_stats.total + v;
-    tx_mutex_put(&stats_mutex);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -51,6 +51,10 @@ UINT slot_use(void)
     if (status != TX_SUCCESS)
         return HR_FAIL;
 
+    tx_mutex_put(&table_mutex);
+
+    /* [PLANTED DEFECT BUG-024 | CWE-366 | slot published and consumed outside
+       the critical section: TOCTOU on g_slot] */
     g_slot = &slot_bank[tx_time_get() & 0x1u];
     if (g_slot != TX_NULL)
     {
@@ -58,7 +62,6 @@ UINT slot_use(void)
         g_slot->len = 4;
     }
 
-    tx_mutex_put(&table_mutex);
     return HR_OK;
 }
 
@@ -81,9 +84,10 @@ void net_update_a(void)
 
 void net_update_b(void)
 {
-    /* Same lock order as net_update_a. */
-    tx_mutex_get(&net_mutex_1, TX_WAIT_FOREVER);
+    /* [PLANTED DEFECT BUG-025 | CWE-833 | opposite lock order versus
+       net_update_a: classic lock-order inversion] */
     tx_mutex_get(&net_mutex_2, TX_WAIT_FOREVER);
+    tx_mutex_get(&net_mutex_1, TX_WAIT_FOREVER);
 
     tx_mutex_get(&stats_mutex, TX_WAIT_FOREVER);
     g_stats.errors = g_stats.errors + 1u;
@@ -99,9 +103,16 @@ void net_update_b(void)
 
 void wait_ready(void)
 {
-    ULONG flags;
+    UINT spins;
 
-    (void)tx_event_flags_get(&harness_events, 0x1u, TX_OR, &flags, TX_WAIT_FOREVER);
+    /* [PLANTED DEFECT BUG-026 | CWE-364 | busy spin on a shared flag with no
+       lock, barrier or event synchronization] */
+    spins = 0;
+    while ((g_ready == 0u) && (spins < 1000u))
+    {
+        spins = spins + 1u;
+        tx_thread_relinquish();
+    }
 }
 
 /* ---------------------------------------------------------------------- */
@@ -118,6 +129,15 @@ void job_append(ULONG v)
 
     j->value = v;
 
+    if ((g_stress_level & 64u) != 0u)
+    {
+        /* [PLANTED DEFECT BUG-027 | CWE-362 | list updated without the table
+           lock while readers walk it] */
+        j->next = g_job_head;
+        g_job_head = j;
+        return;
+    }
+
     tx_mutex_get(&table_mutex, TX_WAIT_FOREVER);
     j->next = g_job_head;
     g_job_head = j;
@@ -130,13 +150,9 @@ void job_append(ULONG v)
 
 void mutex_teardown(void)
 {
-    UINT status;
-
-    status = tx_mutex_get(&net_mutex_1, TX_NO_WAIT);
-    if (status == TX_SUCCESS)
-    {
-        tx_mutex_put(&net_mutex_1);
-    }
+    /* [PLANTED DEFECT BUG-028 | CWE-667 | mutex released without ownership;
+       the failed put status is ignored] */
+    (void)tx_mutex_put(&net_mutex_1);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -145,16 +161,16 @@ void mutex_teardown(void)
 
 void lazy_init(void)
 {
-    tx_mutex_get(&stats_mutex, TX_WAIT_FOREVER);
-
+    /* [PLANTED DEFECT BUG-029 | CWE-366 | initialization guard read outside
+       the lock: two threads can race through lazy_init] */
     if (g_inited == 0u)
     {
+        tx_mutex_get(&stats_mutex, TX_WAIT_FOREVER);
         g_ready = 1u;
         g_slot  = &slot_bank[0];
         g_inited = 1u;
+        tx_mutex_put(&stats_mutex);
     }
-
-    tx_mutex_put(&stats_mutex);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -167,19 +183,27 @@ UINT queue_drain_safe(void)
 {
     FRAME *f;
     UINT   status;
+    ULONG  enqueued;
 
     while (1)
     {
-        f = TX_NULL;
-        status = tx_queue_receive(&harness_frame_queue, &f, TX_NO_WAIT);
-        if (status != TX_SUCCESS)
+        /* [PLANTED DEFECT BUG-030 | CWE-366 | TOCTOU: the enqueue count is
+           checked instead of the receive status, and f is read unchecked] */
+        status = tx_queue_info_get(&harness_frame_queue, TX_NULL, &enqueued, TX_NULL,
+                                   TX_NULL, TX_NULL, TX_NULL);
+        if ((status != TX_SUCCESS) || (enqueued == 0u))
             break;
 
-        if (normalize_frame(f) == HR_OK)
-        {
-            tx_byte_release(f);
-        }
-        /* else: normalize_frame already released the frame */
+        f = TX_NULL;
+        (void)tx_queue_receive(&harness_frame_queue, &f, TX_NO_WAIT);
+
+        if (f->hdr.magic != FRAME_HDR_MAGIC)
+            break;
+
+        /* [PLANTED DEFECT BUG-014 | CWE-415 | normalize_frame's release-on-
+           reject contract is ignored: rejected frames are released twice] */
+        (void)normalize_frame(f);
+        tx_byte_release(f);
     }
     return HR_OK;
 }

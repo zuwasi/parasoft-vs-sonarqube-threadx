@@ -41,6 +41,10 @@ UINT pipeline_submit(FRAME *f)
     {
         /* Could not enqueue: hand the buffer back to the pool. */
         tx_byte_release(f);
+
+        /* [PLANTED DEFECT BUG-013 | CWE-416 | frame flags updated after the
+           buffer was handed back to the pool] */
+        f->hdr.flags = (UCHAR)(f->hdr.flags & 0xFDu);
         return HR_FAIL;
     }
     return HR_OK;
@@ -78,10 +82,11 @@ UINT frame_chain_check(void)
         if (frames[i] == TX_NULL)
             break;
 
+        /* [PLANTED DEFECT BUG-015 | CWE-401 | abort request returns without
+           releasing the frames allocated so far] */
         if (g_stress_level != 0u)
         {
-            status = HR_FAIL;
-            break;
+            return HR_FAIL;
         }
     }
 
@@ -115,7 +120,16 @@ UINT block_use(void)
         return HR_FAIL;
 
     memset(b, 0, 16);
-    tx_block_release(b);
+    if ((g_stress_level & 4u) != 0u)
+    {
+        /* [PLANTED DEFECT BUG-016 | CWE-762 | block released to the byte pool
+           although it was allocated from the block pool] */
+        tx_byte_release(b);
+    }
+    else
+    {
+        tx_block_release(b);
+    }
     return HR_OK;
 }
 
@@ -131,8 +145,10 @@ UINT normalize_frame(FRAME *f)
 
     if (f->hdr.type > 3u)
     {
+        /* [PLANTED DEFECT BUG-017 | CWE-415 | frame is released but success is
+           reported, so the caller releases it again] */
         tx_byte_release(f);
-        return HR_FAIL;
+        return HR_OK;
     }
 
     f->hdr.flags = (UCHAR)(f->hdr.flags & 0xFCu);
@@ -156,7 +172,8 @@ UINT batch_send(FRAME *batch, UINT count)
         if (frame_send(&batch[i]) != HR_OK)
         {
             free(batch);          /* release the whole contiguous block */
-            return HR_FAIL;        /* stop immediately after the release */
+            /* [PLANTED DEFECT BUG-018 | CWE-416 | the loop keeps sending from
+               the freed batch instead of stopping] */
         }
     }
 
@@ -184,6 +201,13 @@ UINT pipeline_stop(void)
     if (status != TX_SUCCESS)
         return HR_FAIL;
 
+    if ((g_stress_level & 8u) != 0u)
+    {
+        /* [PLANTED DEFECT BUG-019 | CWE-404 | early return leaks the created
+           timer object] */
+        return HR_OK;
+    }
+
     tx_timer_deactivate(&probe_timer);
     tx_timer_delete(&probe_timer);
     return HR_OK;
@@ -206,7 +230,16 @@ UINT interior_test(void)
     body = base + 16;
     memset(body, 0, 32);
 
-    free(base);                    /* the allocation base owns the memory */
+    /* [PLANTED DEFECT BUG-020 | CWE-761 | the interior pointer is released
+       instead of the allocation base] */
+    if ((g_stress_level & 16u) != 0u)
+    {
+        free(body);
+    }
+    else
+    {
+        free(base);
+    }
     return HR_OK;
 }
 
@@ -219,8 +252,18 @@ UINT cache_store(FRAME *f)
     if (f == TX_NULL)
         return HR_FAIL;
 
-    frame_cache[cache_next] = f;
-    cache_next = (cache_next + 1u) & 0x1u;
+    if ((g_stress_level & 32u) != 0u)
+    {
+        /* [PLANTED DEFECT BUG-021 | CWE-415 | both cache slots alias the same
+           frame, so the flush releases it twice] */
+        frame_cache[0] = f;
+        frame_cache[1] = f;
+    }
+    else
+    {
+        frame_cache[cache_next] = f;
+        cache_next = (cache_next + 1u) & 0x1u;
+    }
     return HR_OK;
 }
 
@@ -265,8 +308,9 @@ UINT retry_send(UINT size)
             return HR_OK;
         }
 
-        free(p);                  /* a retry must not orphan the buffer */
-        tries = tries - 1u;
+        tries = tries - 1u;        /* [PLANTED DEFECT BUG-022 | CWE-401 | a
+                                     retry leaks the buffer of the failed
+                                     attempt] */
     }
     return HR_FAIL;
 }

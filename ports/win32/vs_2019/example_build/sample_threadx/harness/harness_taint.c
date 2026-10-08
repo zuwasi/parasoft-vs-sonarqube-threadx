@@ -53,7 +53,9 @@ void cal_update(CMD_MSG *m)
 {
     UINT idx;
 
-    idx = (UINT)m->sensor_id & (UINT)(CAL_TABLE_SIZE - 1u);
+    /* [PLANTED DEFECT BUG-039 | CWE-129 | received sensor id indexes the
+       calibration table without a bounds check] */
+    idx = (UINT)m->sensor_id;
     cal_table[idx] = cal_table[idx] + (ULONG)m->param;
 }
 
@@ -66,8 +68,10 @@ void msg_data_copy(CMD_MSG *m)
     UCHAR  dst[64];
     UINT16 len;
 
+    /* [PLANTED DEFECT BUG-040 | CWE-787 | copy length validated against the
+       queue capacity, not the destination buffer] */
     len = (UINT16)((ULONG)m->param + 4u);
-    if (len <= (UINT16)sizeof(dst))
+    if (len <= 128u)
         memcpy(dst, m, (size_t)len);
 }
 
@@ -79,8 +83,9 @@ void name_copy(CMD_MSG *m)
 {
     CHAR label[16];
 
-    if (strlen((const char *)m->name) < sizeof(label))
-        strcpy(label, (const char *)m->name);
+    /* [PLANTED DEFECT BUG-041 | CWE-120 | received name copied into the fixed
+       label without a length check] */
+    strcpy(label, (const char *)m->name);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -92,7 +97,10 @@ void slot_store(CMD_MSG *m)
     UINT idx;
 
     idx = (UINT)m->sensor_id;
-    if (idx < (UINT)SLOT_VALUES_SIZE)
+
+    /* [PLANTED DEFECT BUG-042 | CWE-129 | check uses the old table size (8);
+       the slot table has only 4 entries] */
+    if (idx < 8u)
         slot_values[idx] = (ULONG)m->param;
 }
 
@@ -105,9 +113,9 @@ void sums_update(CMD_MSG *m)
     UINT n;
     UINT i;
 
+    /* [PLANTED DEFECT BUG-043 | CWE-787 | the received count is not clamped
+       to the accumulator array size] */
     n = (UINT)m->param >> 2;
-    if (n > (UINT)SUMS_SIZE)
-        n = (UINT)SUMS_SIZE;
 
     for (i = 0; i < n; i++)
         sums[i] = sums[i] + 1u;
@@ -122,7 +130,9 @@ void log_text(const CHAR *text)
     if (text == TX_NULL)
         return;
 
-    printf("%s", (const char *)text);
+    /* [PLANTED DEFECT BUG-044 | CWE-134 | received text used directly as a
+       printf format string] */
+    printf((const char *)text);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -138,7 +148,17 @@ UINT dup_string(const CHAR *s)
     if (s == TX_NULL)
         return HR_FAIL;
 
-    need = strlen((const char *)s) + 1u;
+    /* [PLANTED DEFECT BUG-045 | CWE-680/787 | legacy binary names are sized
+       without the terminator, so strcpy overflows by one byte] */
+    if (((UCHAR)s[0] & 0x80u) != 0u)
+    {
+        need = strlen((const char *)s);
+    }
+    else
+    {
+        need = strlen((const char *)s) + 1u;
+    }
+
     p = (CHAR *)malloc(need);
     if (p == TX_NULL)
         return HR_FAIL;
@@ -156,9 +176,10 @@ UINT nibble_dispatch(UCHAR raw)
 {
     UINT type;
 
+    /* [PLANTED DEFECT BUG-046 | CWE-129 | protocol type nibble indexes the
+       handler table without a bounds check] */
     type = ((UINT)raw >> 4) & 0xFu;
-    if (type < (UINT)HANDLER_COUNT)
-        handlers[type]();
+    handlers[type]();
 
     return HR_OK;
 }
