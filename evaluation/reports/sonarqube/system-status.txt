@@ -1,0 +1,10 @@
+SonarQube CLI 1.9.0 system status:
+- System check: healthy
+- Authentication: active
+- Server: https://sonarcloud.io
+- Organization: zuwasi
+- Vortex: Not entitled
+
+The CLI can authenticate and reach SonarQube Cloud, but the active connection
+does not include the Vortex code-analysis entitlement. This matches the
+project-backed analysis response: 403 Forbidden, all requested C files skipped.

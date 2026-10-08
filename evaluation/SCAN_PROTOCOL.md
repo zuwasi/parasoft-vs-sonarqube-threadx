@@ -74,6 +74,12 @@ run; no compiler-warning counts are used in the comparison.
   connection (403 Forbidden)`. The JSON reported all 6 changed C files or all 8
   evaluated C files as skipped. These are **not zero-issue code scans**; Sonar
   code TP/FP/FN values are unavailable.
+- `sonar system status` reports authentication healthy but `VORTEX Status: Not
+  entitled`. Sonar's [Vortex documentation](https://docs.sonarsource.com/sonarqube-cloud/administering-sonarcloud/ai-features/sonar-vortex)
+  says Vortex is part of Sonar Agent Essentials, a separate subscription for
+  SonarQube Cloud annual Team or Enterprise plans. The current `zuwasi`
+  organization has no Agent Essentials entitlement. A CLI flag change cannot
+  grant the entitlement.
 - The local secrets scan completed on the same eight C files in each state and
   found zero secrets. An initial full-worktree secrets scan timed out at the CLI's
   30-second limit; narrowing to the eight evaluated C files completed in <1s.
@@ -111,6 +117,7 @@ nesting metrics, not harness defect findings.
 | bugged | project-backed `--base harness-clean --depth DEEP` | 18:58:23Z | 1 | Vortex 403; 6 files skipped |
 | bugged | project-backed `--file x8 --depth DEEP` | 18:58:23Z | 1 | Vortex 403; 8 files skipped |
 | bugged | `analyze secrets` on 8 C files | 18:58:23Z | 0 | 0 secrets |
+| clean + bugged | `sonar system status` | after 18:58Z | 0 | Auth healthy; Vortex not entitled |
 
 The run log is committed as `evaluation/reports/sonarqube/run-log.txt`.
 Complete CLI JSON/log output and the first timeout record are also retained in
@@ -127,5 +134,6 @@ results are committed under `evaluation/reports/sonarqube/`.
 - Two planted candidates (BUG-005 and BUG-031) were invalid on the evaluated
   target and are excluded from valid-defect recall.
 - SonarQube CLI's local secrets scanner is not a C/C++ flow analyzer. The CLI's
-  project-backed Vortex code engine was forbidden (403), so no cross-vendor
-  TP/FP/FN comparison is possible in this connection.
+  project-backed Vortex code engine is not entitled (403), so no cross-vendor
+  TP/FP/FN comparison is possible on the current connection. Sonar Agent
+  Essentials or a supported entitled Server connection is required.

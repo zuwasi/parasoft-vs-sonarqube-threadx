@@ -18,10 +18,14 @@ strict false negatives**, respectively. Two of the original 52 candidates are
 invalid on the Win32 target and are excluded from recall.
 
 SonarQube CLI 1.9.0 authenticated and scanned the local secrets scope, reporting
-zero secrets in each state. Its project-backed DEEP code-analysis requests were
-rejected with **403 Forbidden** by the Vortex service; all requested C files were
-skipped. Sonar therefore has **no code TP/FP/FN result** in this experiment. A
-zero-secrets result is not evidence that the planted code defects were absent.
+zero secrets in each state. CLI system status explicitly reports Vortex as
+**Not entitled** for this connection. Sonar's documentation says Vortex is part
+of Sonar Agent Essentials, a separate subscription (Cloud annual Team or
+Enterprise). The current organization has no Agent Essentials entitlement. Its
+project-backed DEEP code-analysis requests were rejected with **403 Forbidden**
+and all requested C files were skipped. Sonar therefore has **no code TP/FP/FN
+result** in this experiment. A zero-secrets result is not evidence that the
+planted code defects were absent.
 
 The intended clean baseline is not fully clean. Parasoft found a real, unmarked
 possible read past the 128-byte `sa_src` buffer in the clean `sa_store_len`
@@ -141,9 +145,13 @@ Both returned:
 
 The CLI JSON marks all 8 all-file inputs and all 6 changed harness C files as
 skipped. This is a service/connection capability failure, not a clean Sonar
-analysis. The locally executable secrets scanner did complete and reported **0
-secrets** in each state. It is a different analysis and does not score the 50 C
-defect candidates.
+analysis. `sonar system status` also reports `VORTEX Status: Not entitled`.
+The [Sonar Vortex documentation](https://docs.sonarsource.com/sonarqube-cloud/administering-sonarcloud/ai-features/sonar-vortex)
+states that Vortex is part of Sonar Agent Essentials, a separate subscription
+for SonarQube Cloud annual Team or Enterprise plans. The current organization
+does not have that entitlement; changing CLI flags cannot grant it. The locally
+executable secrets scanner did complete and reported **0 secrets** in each
+state. It is a different analysis and does not score the 50 C defect candidates.
 
 Normalized Sonar results and the exact 403 response are in
 [`reports/sonarqube/`](reports/sonarqube/). The initial clean-state secrets scan
