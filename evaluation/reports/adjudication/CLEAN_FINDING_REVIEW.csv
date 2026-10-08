@@ -1,0 +1,12 @@
+Run,Profile,Classification,Rule,File,Line,Message,Review
+clean-builtin-Flow-Analysis-Aggressive,Flow Analysis Aggressive,FP-contextual,BD-PB-MEMOPT,harness_sizearith.c,51,Call to memcpy may be optimized out because dst is not used later,Local scratch-copy routine intentionally has no observable output
+clean-builtin-Flow-Analysis-Aggressive,Flow Analysis Aggressive,baseline-defect-out-of-catalog,BD-PB-OVERFRD,harness_sizearith.c,161,Possible read past sa_src[128] for msg_len up to 65535,Real unmarked issue already present in harness-clean
+clean-builtin-Flow-Analysis-Aggressive,Flow Analysis Aggressive,FP-contextual,BD-PB-CC,harness_sizearith.c,260,Condition n >= 64 always evaluates to false,Length was already clamped below 64; redundant check
+clean-builtin-Flow-Analysis-Aggressive,Flow Analysis Aggressive,FP-contextual,BD-PB-MEMOPT,harness_sizearith.c,277,Call to memcpy may be optimized out because dst is not used later,Local scratch-copy routine intentionally has no observable output
+clean-builtin-Flow-Analysis-Aggressive,Flow Analysis Aggressive,FP-contextual,BD-PB-VOVR,harness_memory.c,61,Value of status is never used,Initial value is overwritten before any read
+clean-builtin-Flow-Analysis-Aggressive,Flow Analysis Aggressive,FP-contextual,BD-PB-MEMOPT,harness_taint.c,71,Call to memcpy may be optimized out because dst is not used later,Local scratch-copy routine intentionally has no observable output
+clean-builtin-Recommended-Rules,Recommended Rules,FP-contextual,CODSTA-82,harness_init.c,168,Loop does not contain terminate point,Intentional perpetual ThreadX worker loop
+clean-builtin-Recommended-Rules,Recommended Rules,FP-contextual,CODSTA-82,harness_init.c,236,Loop does not contain terminate point,Intentional perpetual ThreadX worker loop
+clean-builtin-Recommended-Rules,Recommended Rules,FP-contextual,CODSTA-82,harness_init.c,255,Loop does not contain terminate point,Intentional perpetual ThreadX worker loop
+clean-builtin-Recommended-Rules,Recommended Rules,baseline-defect-out-of-catalog,BD-PB-OVERFRD,harness_sizearith.c,161,Possible read past sa_src[128] for msg_len up to 65535,Real unmarked issue already present in harness-clean
+clean-builtin-Recommended-Rules,Recommended Rules,FP-contextual,BD-PB-CC,harness_sizearith.c,260,Condition n >= 64 always evaluates to false,Length was already clamped below 64; redundant check

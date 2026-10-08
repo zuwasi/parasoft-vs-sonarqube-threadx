@@ -1,0 +1,12 @@
+sonar | clean | --file x8 DEEP | 2026-10-08T184845Z | exit=0
+sonar | clean | secrets | 2026-10-08T184845Z | exit=1
+sonar | clean | --file x8 DEEP | 2026-10-08T185158Z | exit=0
+sonar | clean | secrets | 2026-10-08T185158Z | exit=0
+sonar | bugged | --base harness-clean DEEP | 2026-10-08T185354Z | exit=0
+sonar | bugged | --file x8 DEEP | 2026-10-08T185354Z | exit=0
+sonar | bugged | secrets | 2026-10-08T185354Z | exit=0
+sonar | clean | --file x8 DEEP | 2026-10-08T185808Z | exit=1
+sonar | clean | secrets | 2026-10-08T185808Z | exit=0
+sonar | bugged | --base harness-clean DEEP | 2026-10-08T185823Z | exit=1
+sonar | bugged | --file x8 DEEP | 2026-10-08T185823Z | exit=1
+sonar | bugged | secrets | 2026-10-08T185823Z | exit=0

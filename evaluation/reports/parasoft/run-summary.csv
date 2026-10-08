@@ -1,0 +1,5 @@
+"Run","State","Configuration","XmlFindings","FlowViolations","StandardViolations","HarnessFindings","OtherFindings","FindingsCsv"
+"bugged-builtin-Flow-Analysis-Aggressive","bugged","builtin-Flow-Analysis-Aggressive","111","109","2","27","84","bugged-builtin-Flow-Analysis-Aggressive-findings.csv"
+"bugged-builtin-Recommended-Rules","bugged","builtin-Recommended-Rules","36","20","16","21","15","bugged-builtin-Recommended-Rules-findings.csv"
+"clean-builtin-Flow-Analysis-Aggressive","clean","builtin-Flow-Analysis-Aggressive","90","88","2","6","84","clean-builtin-Flow-Analysis-Aggressive-findings.csv"
+"clean-builtin-Recommended-Rules","clean","builtin-Recommended-Rules","20","4","16","5","15","clean-builtin-Recommended-Rules-findings.csv"

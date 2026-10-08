@@ -1,0 +1,4 @@
+parasoft | clean | builtin://Flow Analysis Aggressive | start=2026-10-08T183158Z end=2026-10-08T183405Z exit=0
+parasoft | bugged | builtin://Flow Analysis Aggressive | start=2026-10-08T183406Z end=2026-10-08T183616Z exit=0
+parasoft | clean | builtin://Recommended Rules | start=2026-10-08T183618Z end=2026-10-08T183810Z exit=0
+parasoft | bugged | builtin://Recommended Rules | start=2026-10-08T183812Z end=2026-10-08T184007Z exit=0

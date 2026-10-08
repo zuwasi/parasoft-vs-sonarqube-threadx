@@ -1,0 +1,13 @@
+# SHA-256 of the original Parasoft reports retained locally under
+# C:\projects\parasoft-vs-SQ\reports\parasoft\<run>\.
+# The normalized findings CSVs in this directory are the committed result data.
+b1f32ffd81dfc3b0d11a8a89a645ce8a775c788a79f8cd6608e06d39860e96f8  bugged-builtin-Flow-Analysis-Aggressive/report.xml
+bfd3f919d726e0dc84f66cf28f198a1718feb933067f40999b5852d3a4573e90  bugged-builtin-Flow-Analysis-Aggressive/report.html
+4582f8c889a0335fe71e503f13f1b9a7a4c9aaafacc1441707900db1e08ec65c  bugged-builtin-Recommended-Rules/report.xml
+cd39c5bc131068490b0f1cdf7e1c7c1c0844af87ed622e8faf7bcedeba275432  bugged-builtin-Recommended-Rules/metrics.xml
+b84595cdab3d109259de3bfcb4cd70b5ba22742aedee55c3ec311ec581277d43  bugged-builtin-Recommended-Rules/report.html
+235fd61d0eafa584dd36c7f6cae92561c72679be4c3ebbbba9ee7bfab22539c3  clean-builtin-Flow-Analysis-Aggressive/report.xml
+1e7d7e02c2c4a82770b0c176730f1a2083fb6b111355fd524bafbaa53dbfe37f  clean-builtin-Flow-Analysis-Aggressive/report.html
+3285d5a46fc298f2a4590d6a3360a048bc706240e4718d9a608fc04215f608ef  clean-builtin-Recommended-Rules/report.xml
+fc8422431aff621c765ab6769891fa4445622f151c1911c4912f1b769a592a12  clean-builtin-Recommended-Rules/metrics.xml
+38192cd95de2ab0d8ad2d6ae9f0696958d20b9f47be4932e4c05f0797aa6a887  clean-builtin-Recommended-Rules/report.html

@@ -1,0 +1,6 @@
+State,Analysis,Files,ProjectKey,ExitCode,Result,Interpretation
+clean,DEEP all-files,8,zuwasi_parasoft-vs-sonarqube-threadx,1,Vortex 403 Forbidden; 8 files skipped,Code TP/FP/FN unavailable
+bugged,DEEP all-files,8,zuwasi_parasoft-vs-sonarqube-threadx,1,Vortex 403 Forbidden; 8 files skipped,Code TP/FP/FN unavailable
+bugged,DEEP changeset vs harness-clean,6,zuwasi_parasoft-vs-sonarqube-threadx,1,Vortex 403 Forbidden; 6 files skipped,Code TP/FP/FN unavailable
+clean,Local secrets,8,none,0,0 secrets found,Only secrets-scanner scope; not general code analysis
+bugged,Local secrets,8,none,0,0 secrets found,Only secrets-scanner scope; not general code analysis

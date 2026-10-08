@@ -3,8 +3,8 @@
 **Document purpose:** Engineering ground truth for the Parasoft C/C++test (Standard, CLI) vs
 SonarQube CLI static-analysis comparison performed on the ThreadX Win32 sample application.
 
-**Ground truth definition:** the complete `git diff harness-clean..bugged` between the two
-signed git tags in this repository.  Every defect below carries an in-source banner
+**Candidate set definition:** the complete `git diff harness-clean..bugged` between the two
+signed git tags in this repository. Each of the 52 planted candidates carries an in-source banner
 `[PLANTED DEFECT BUG-nnn | CWE-x | ...]` at the exact defect line, so tool findings can be
 mapped to this catalog mechanically.
 
@@ -12,22 +12,23 @@ mapped to this catalog mechanically.
 |---|---|---|
 | Pristine upstream ThreadX | `baseline-clean` | `93387b0a` |
 | + Win32 example_build adapted to the VS2026 toolchain | (part of history) | `bb0c450c` |
-| + clean harness (false-positive baseline, **no defects**) | `harness-clean` | `844260e1` |
-| + 52 deliberate defects (**detection target**) | `bugged` | `9d699595` |
+| + evaluation harness (intended clean baseline; post-scan review found one unmarked issue) | `harness-clean` | `844260e1` |
+| + 52 planted candidates (**detection target**) | `bugged` | `9d699595` |
 
 ---
 
 ## 1. Design principles of the defect set
 
-1. **Flow-analysis grade.**  Every defect requires interprocedural, path-sensitive or
-   dataflow reasoning to detect.  None are findable by grep-style lexical rules alone.
-2. **Runtime-benign, statically reachable.**  Trigger data originates from ThreadX queue
+1. **Flow-analysis grade (design intent).** Candidates were designed to require
+   interprocedural, path-sensitive or dataflow reasoning. Post-scan review found two
+   candidates that are not defects on the evaluated Win32 target.
+2. **Runtime-benign, statically reachable (design intent).** Trigger data originates from ThreadX queue
    receives (`tx_queue_receive` into caller memory) and volatile simulated hardware
    registers (`g_sensor_*`).  At runtime the producer thread only ever writes documented,
    in-range values (see `harness_init.c`), so the demo application keeps running with all
-   52 defects present (verified: 20s soak).  Statically, the analyzers cannot correlate
+   planted candidates present (verified: 20s soak). Statically, the analyzers cannot correlate
    queue payloads across threads and must treat every volatile read as a fresh unknown
-   value, so every defect remains reachable.
+   value. The audit below records exceptions and an unmarked issue in the clean baseline.
 3. **No constant-propagation give-aways.**  Bounds checks that are present use live
    values; defect branches depend on error paths (queue full, allocation failure, abort
    request) that genuinely cannot fire under the harness's runtime conditions.
@@ -47,7 +48,7 @@ mapped to this catalog mechanically.
 | BUG-002 | CWE-197 | Size arithmetic | harness_sizearith.c:46 | sa_copy_checked | magnitude check admits negative lengths → huge size_t |
 | BUG-003 | CWE-193 | Size arithmetic | harness_sizearith.c:63 | sa_log_write | `idx <= LOG_DEPTH` off-by-one writes one past ring |
 | BUG-004 | CWE-131 | Size arithmetic | harness_sizearith.c:111 | sa_frame_new | memcpy of `sizeof(pointer)` bytes → partially initialized frame |
-| BUG-005 | CWE-190 | Size arithmetic | harness_sizearith.c:133 | sa_pack | unguarded `payload+12+4` wraps to undersized allocation |
+| BUG-005 | CWE-190 | Size arithmetic | harness_sizearith.c:133 | sa_pack | invalid candidate: `UINT16 + 16` cannot wrap 32-bit `ULONG` |
 | BUG-006 | CWE-197 | Size arithmetic | harness_sizearith.c:154 | sa_store_len | stored length truncated for allocation, full length for copy |
 | BUG-007 | CWE-787 | Size arithmetic | harness_sizearith.c:176 | sa_table_put | missing column bounds check; negative columns walk below table |
 | BUG-008 | CWE-131 | Size arithmetic | harness_sizearith.c:196 | sa_cfg_snapshot | `sizeof(cfg)` (pointer) copied instead of `sizeof(struct)` |
@@ -73,7 +74,7 @@ mapped to this catalog mechanically.
 | BUG-028 | CWE-667 [TX] | Concurrency | harness_concurrency.c:153 | mutex_teardown | non-owner mutex put, failed status ignored |
 | BUG-029 | CWE-366 | Concurrency | harness_concurrency.c:164 | lazy_init | init guard read outside the lock (racy double-checked init) |
 | BUG-030 | CWE-366 | Concurrency | harness_concurrency.c:190 | queue_drain_safe | enqueue-count check instead of receive status; f read unchecked |
-| BUG-031 | CWE-476 | NULL paths | harness_nullpaths.c:74 | channel_update | mirror pointer checked, primary pointer dereferenced |
+| BUG-031 | CWE-476 | NULL paths | harness_nullpaths.c:74 | channel_update | invalid candidate: mirror non-NULL implies primary is non-NULL |
 | BUG-032 | CWE-476 | NULL paths | harness_nullpaths.c:94 | sensor_dispatch | lookup_channel result used without NULL check |
 | BUG-033 | CWE-690 | NULL paths | harness_nullpaths.c:113 | slot_allocate | malloc result dereferenced without NULL check |
 | BUG-034 | CWE-457 | NULL paths | harness_nullpaths.c:151 | frame_consume | get_frame status ignored; out-param never assigned on error |
@@ -166,8 +167,8 @@ knowledge rather than generic C analysis.
   statement (inter-statement flow).
 - **Runtime safety:** the garbage read only steers a counter increment.
 
-### BUG-005 — unguarded size addition wraps
-- **CWE:** CWE-190 → CWE-787
+### BUG-005 — invalid candidate: size addition cannot wrap on Win32
+- **CWE:** CWE-190 (intended; not present on the evaluated target)
 - **Site:** `harness_sizearith.c:133` in `sa_pack`
 - **Trigger path:** `producer_entry → harness_tick → sa_pack(payload_len = g_sensor_len)`
 - **Buggy code:**
@@ -176,9 +177,10 @@ knowledge rather than generic C analysis.
   p = (UCHAR *)malloc((size_t)total);
   memcpy(p + 12, sa_src, (size_t)payload_len);
   ```
-- **Why hard:** wrap detection on a three-term addition of a volatile-derived UINT16,
-  chained to an allocation-vs-copy mismatch.
-- **Runtime safety:** `g_sensor_len` is 0..63 at runtime; total never exceeds 79.
+- **Audit result:** `payload_len` is `UINT16`, so the maximum total is 65,535 + 12 + 4
+  = 65,551. `ULONG` is 32-bit on the Win32 target, so the addition cannot wrap.
+  The allocation also covers the copied payload. This candidate is excluded from
+  valid-defect scoring.
 
 ### BUG-006 — truncated stored length vs full-width copy
 - **CWE:** CWE-197 → CWE-787
@@ -542,8 +544,8 @@ see the concurrency at all — this family is the sharpest differentiator in the
 
 ## 6. NULL / validation-path defects (BUG-031 .. BUG-038)
 
-### BUG-031 — validated the wrong lookup result
-- **CWE:** CWE-476
+### BUG-031 — invalid candidate: checked accessor implies primary is valid
+- **CWE:** CWE-476 (intended; not present in this implementation)
 - **Site:** `harness_nullpaths.c:74` in `channel_update`
 - **Buggy code:**
   ```c
@@ -553,9 +555,11 @@ see the concurrency at all — this family is the sharpest differentiator in the
   {
       primary->state = mirror->state;   /* primary unchecked */
   ```
-- **Why hard:** two similar calls; the NULL check tests the wrong variable.  Requires
-  distinguishing which call's result is dereferenced.
-- **Runtime safety:** runtime ids are 0..3 → both lookups always succeed.
+- **Audit result:** `lookup_channel` and `accessor_channel` both reject exactly
+  `id >= CAL_TABLE_SIZE`. For in-range IDs, the primary lookup returns the channel slot;
+  the accessor returns that same slot only when enabled. Therefore `mirror != TX_NULL`
+  implies `primary != TX_NULL`, so the dereference is safe. This candidate is excluded
+  from valid-defect scoring.
 
 ### BUG-032 — unchecked lookup dereference
 - **CWE:** CWE-476
@@ -770,12 +774,33 @@ When mapping tool findings to this catalog:
 1. **True Positive (TP):** a finding whose primary location is at, or on a path
    directly implicated by, a defect site above (± a few lines), and whose message
    describes the planted defect's root cause.
-2. **False Negative (FN):** a catalog defect with no matching finding by that tool.
+2. **Strict False Negative (FN):** a valid catalog defect without a finding that
+   describes its root cause. Partial or indirect findings are recorded separately
+   and still count as strict false negatives for recall.
 3. **False Positive (FP):** a finding on code that is **not** a planted defect site
    and does not describe a genuine defect of the clean harness or upstream ThreadX
    code (judged against the `harness-clean` baseline and manual review).
 4. **Pre-existing/upstream:** findings on pristine ThreadX kernel code (also present
    in the `baseline-clean` state) are counted separately; they are real-code findings
    of the upstream project, not FPs of this evaluation.
-5. The compiler's own warnings (e.g. MSVC C4700 for BUG-008/BUG-048, C4996 for the
-   strcpy sites) are recorded as a free "baseline detector" column in the report.
+5. Compiler warnings are not included in the measured tool scores in this report.
+
+## 10. Post-scan ground-truth audit
+
+The scan results were used to inspect the benchmark itself. The catalog contains
+52 planted markers, but only **50 candidates are valid defects** under the evaluated
+Win32 types and code paths:
+
+- **BUG-005 is not a defect:** a 16-bit payload plus 16 bytes cannot overflow 32-bit
+  `ULONG`; the allocation covers the subsequent payload copy.
+- **BUG-031 is not a defect:** the checked accessor and primary lookup share the same
+  range guard and table slot, so a non-NULL accessor proves the primary is non-NULL.
+- **Clean baseline issue:** `harness-clean` `sa_store_len` allocates `msg_len` bytes
+  plus a terminator, then reads `msg_len` bytes from the 128-byte global `sa_src`
+  without bounding `msg_len` to 128. Parasoft reports `BD-PB-OVERFRD` at
+  `harness_sizearith.c:161`; this issue predates the planted diff and contaminates
+  clean-state FP measurements.
+
+The report therefore scores 50 valid planted candidates, and lists findings on the
+invalid candidates and the baseline issue separately. No post-scan source fixes were
+made, preserving both scanned tags and the original reports.

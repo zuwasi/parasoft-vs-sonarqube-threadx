@@ -1,0 +1,34 @@
+{
+  "secrets": {
+    "issues": [],
+    "summary": {
+      "totalIssues": 0
+    }
+  },
+  "agentic": {
+    "files": [],
+    "ignored": [],
+    "failures": [],
+    "skipped": [
+      "ports/win32/vs_2019/example_build/sample_threadx/harness/harness_concurrency.c",
+      "ports/win32/vs_2019/example_build/sample_threadx/harness/harness_init.c",
+      "ports/win32/vs_2019/example_build/sample_threadx/harness/harness_memory.c",
+      "ports/win32/vs_2019/example_build/sample_threadx/harness/harness_nullpaths.c",
+      "ports/win32/vs_2019/example_build/sample_threadx/harness/harness_sizearith.c",
+      "ports/win32/vs_2019/example_build/sample_threadx/harness/harness_taint.c",
+      "ports/win32/vs_2019/example_build/sample_threadx/harness/harness_uninit.c",
+      "ports/win32/vs_2019/example_build/sample_threadx/sample_threadx.c"
+    ],
+    "summary": {
+      "totalIssues": 0,
+      "totalFailures": 0,
+      "totalSkipped": 8
+    },
+    "analysisDepth": "DEEP",
+    "globalError": {
+      "kind": "forbidden",
+      "message": "Vortex analysis is not available on this connection (403 Forbidden)."
+    }
+  },
+  "messages": []
+}

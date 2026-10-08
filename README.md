@@ -10,33 +10,38 @@ maximum depth** and the **SonarQube CLI at its highest analysis level** actually
 find, and what do they falsely report?*
 
 > **DO NOT use this fork as production ThreadX code.**
-> It contains **52 deliberate, documented defects** injected for the evaluation.
+> It contains **52 planted candidates**, 50 valid on the Win32 target, as audited
+> in the report.
 > For production use, go to the pristine upstream: [eclipse-threadx/threadx](https://github.com/eclipse-threadx/threadx).
 
 ## Method in one minute
 
 1. **Pristine upstream** is pinned at tag `baseline-clean` (commit `93387b0a`, MIT).
-2. A **clean sensor-telemetry harness** (`ports/win32/vs_2019/example_build/sample_threadx/harness/`)
+2. An **evaluation sensor-telemetry harness** (`ports/win32/vs_2019/example_build/sample_threadx/harness/`)
    is added: 4 worker threads, byte/block pools, three queues, four mutexes, event
-   flags — realistic ThreadX usage with **zero defects** (tag `harness-clean`).
-3. **52 flow-analysis-grade defects** are injected as small diffs across six family
-   modules (tag `bugged`).  Every defect site carries an in-source banner:
+   flags — realistic ThreadX usage intended as the baseline (tag `harness-clean`).
+   Post-scan review found one unmarked source-buffer over-read in this baseline.
+3. **52 candidates** are injected as small diffs across six family modules (tag
+   `bugged`). Every candidate site carries an in-source banner:
    `/* [PLANTED DEFECT BUG-nnn | CWE-x | ...] */`.
 4. Both tools scan **both states** with the same machine, toolchain and settings:
    - findings on `harness-clean` measure **false positives** (plus upstream-code findings),
    - findings on `bugged` are mapped to the catalog to score **true positives / false negatives**.
-5. Every defect is **runtime-benign** under documented input ranges, so the demo app
-   still runs (validated by soak tests) — defects are reachable statically, not
-   crashing dynamically.  Full per-defect rationale: [`evaluation/PLANTED_BUGS.md`](evaluation/PLANTED_BUGS.md).
+5. The bugged demo survived a 20s soak, but that does not prove every path is
+   runtime-safe. The post-scan audit found two invalid candidates and the baseline
+   issue; see [`evaluation/PLANTED_BUGS.md`](evaluation/PLANTED_BUGS.md).
 
 ## Key artifacts
 
 | Path | Content |
 |------|---------|
-| `evaluation/PLANTED_BUGS.md` | Ground truth: all 52 defects, CWEs, exact `file:line` sites, trigger paths, difficulty rationale, runtime-safety arguments, adjudication rules |
+| `evaluation/PLANTED_BUGS.md` | Ground truth: 52 candidates, 50 valid on Win32, CWEs, sites, trigger paths, rationale, and adjudication |
 | `evaluation/SCAN_PROTOCOL.md` | Exact tool versions, commands, settings and raw report locations (audit trail) |
+| `evaluation/COMPARISON_REPORT.md` | Results, per-family metrics, false-positive review and SonarQube CLI limitation |
+| `evaluation/reports/COMPARISON_REPORT.pdf` | Printable summary report |
+| `evaluation/reports/adjudication/DETECTION_MATRIX.csv` | Per-candidate outcome for each available analysis |
 | `evaluation/scripts/` | Scan runner scripts used to produce the reports |
-| `evaluation/reports/` | Raw scanner outputs per tool and per state |
+| `evaluation/reports/` | Normalized scanner findings, adjudication matrix, run logs, and report hashes; raw Parasoft XML stays local |
 
 ## Git states (the audit trail)
 
@@ -44,8 +49,8 @@ find, and what do they falsely report?*
 |-----|--------|---------|
 | `baseline-clean` | `93387b0a` | Pristine upstream ThreadX (v6.5.x line) |
 | — | `bb0c450c` | Win32 example_build adapted to the VS2026 toolchain (v145) + build-order fix |
-| `harness-clean` | `844260e1` | Clean evaluation harness, **false-positive baseline** |
-| `bugged` | `9d699595` | 52 deliberate defects injected, **detection target** |
+| `harness-clean` | `844260e1` | Intended clean evaluation harness; one baseline issue found post-scan |
+| `bugged` | `9d699595` | 52 planted candidates, 50 valid on the evaluated target |
 | — | `c109e5db`+ | Ground-truth catalog, protocol, reports |
 
 `git diff harness-clean..bugged` is exactly the defect set.
@@ -74,9 +79,10 @@ demo threads plus the harness threads.
 
 ## Results
 
-The comparison report (with per-defect detection matrix and false-positive
-assessment for both tools) is published in `evaluation/` once all scans complete.
-See `evaluation/SCAN_PROTOCOL.md` for the status of each scan.
+See [`evaluation/COMPARISON_REPORT.md`](evaluation/COMPARISON_REPORT.md) for measured
+results. Parasoft produced code findings; SonarQube's DEEP code engine returned
+403 Forbidden for this connection, so its per-defect result is unavailable.
+Sonar's local secrets scan completed with zero findings in both states.
 
 ## Credits
 
