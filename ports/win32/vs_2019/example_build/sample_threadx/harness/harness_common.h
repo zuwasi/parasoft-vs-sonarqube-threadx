@@ -2,7 +2,7 @@
 /* Copyright (c) 2026 zuwasi - Static analysis evaluation harness          */
 /*                                                                         */
 /* Deliberate-defect test harness for the ThreadX Win32 sample application.*/
-/* Part of a static analysis tool comparison (see docs/PLANTED_BUGS.md).  */
+/* Part of a static analysis tool comparison (see evaluation/PLANTED_BUGS.md). */
 /* SPDX-License-Identifier: MIT                                            */
 /***************************************************************************/
 

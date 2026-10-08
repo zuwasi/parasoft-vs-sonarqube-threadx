@@ -182,7 +182,7 @@ CHAR    *pointer = TX_NULL;
     /* Release the block back to the pool.  */
     tx_block_release(pointer);
 
-    /* Start the static-analysis evaluation harness (see docs/).  */
+    /* Start the static-analysis evaluation harness (see evaluation/).  */
     harness_init();
 }
 
