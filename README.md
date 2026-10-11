@@ -39,6 +39,7 @@ find, and what do they falsely report?*
 | `evaluation/SCAN_PROTOCOL.md` | Exact tool versions, commands, settings and raw report locations (audit trail) |
 | `evaluation/COMPARISON_REPORT.md` | Results, per-family metrics, false-positive review and SonarQube CLI limitation |
 | `evaluation/reports/COMPARISON_REPORT.pdf` | Printable summary report |
+| `evaluation/reports/SONAR_MOCKUP_PRESENTATION.pptx` | Presentation with measured Parasoft results and a separately labeled hypothetical Sonar scenario; mock values are not scan results |
 | `evaluation/reports/adjudication/DETECTION_MATRIX.csv` | Per-candidate outcome for each available analysis |
 | `evaluation/scripts/` | Scan runner scripts used to produce the reports |
 | `evaluation/reports/` | Normalized scanner findings, adjudication matrix, run logs, and report hashes; raw Parasoft XML stays local |
