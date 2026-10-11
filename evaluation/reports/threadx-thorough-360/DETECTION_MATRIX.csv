@@ -1,0 +1,53 @@
+BugID,CWE,Family,Site,ValidOnWin32,ThoroughTX60,ThoroughTX360,Adjudication
+BUG-001,CWE-190/787,Size arithmetic,harness_sizearith.c:26,yes,FN,FN,No matching flow finding
+BUG-002,CWE-197,Size arithmetic,harness_sizearith.c:46,yes,FN,FN,Only an unrelated unused-copy finding near this routine
+BUG-003,CWE-193,Size arithmetic,harness_sizearith.c:63,yes,TP,TP,BD-PB-ARRAY at harness_sizearith.c:68
+BUG-004,CWE-131,Size arithmetic,harness_sizearith.c:111,yes,FN,FN,No matching partial-initialization finding
+BUG-005,CWE-190,Size arithmetic,harness_sizearith.c:133,no,INVALID,INVALID,UINT16 plus 16 cannot wrap 32-bit ULONG
+BUG-006,CWE-197,Size arithmetic,harness_sizearith.c:154,yes,FN,FN,No matching allocation-versus-copy finding
+BUG-007,CWE-787,Size arithmetic,harness_sizearith.c:176,yes,FN,FN,No matching unchecked-index finding
+BUG-008,CWE-131,Size arithmetic,harness_sizearith.c:196,yes,FN,FN,No matching partial-configuration-copy finding
+BUG-009,CWE-190/690,Size arithmetic,harness_sizearith.c:231,yes,FN,FN,No matching overflow or unchecked ThreadX allocation finding
+BUG-010,CWE-170,Size arithmetic,harness_sizearith.c:252,yes,TP,TP,BD-PB-ARRAY at harness_sizearith.c:259
+BUG-011,CWE-704,Size arithmetic,harness_sizearith.c:276,yes,FN,FN,Unused-copy report does not identify the masked-length mismatch
+BUG-012,CWE-190/787,Size arithmetic,harness_sizearith.c:295,yes,FN,FN,No matching undersized-header-buffer finding
+BUG-013,CWE-416,Memory,harness_memory.c:45,yes,FN,FN,ThreadX release is not reported as invalidating the frame
+BUG-014,CWE-415,Memory,harness_concurrency.c:203,yes,FN,FN,No finding on the caller's unconditional second release
+BUG-015,CWE-401,Memory,harness_memory.c:85,yes,FN,FN,No matching early-return leak finding
+BUG-016,CWE-762,Memory,harness_memory.c:125,yes,FN,FN,Wrong ThreadX pool release is not reported
+BUG-017,CWE-415,Memory,harness_memory.c:148,yes,FN,FN,No finding on the release-on-success contract
+BUG-018,CWE-416,Memory,harness_memory.c:175,yes,TP,TP,BD-RES-FREE at harness_memory.c:180
+BUG-019,CWE-404,Memory,harness_memory.c:206,yes,FN,FN,No matching ThreadX timer lifecycle finding
+BUG-020,CWE-761,Memory,harness_memory.c:233,yes,TP,TP,BD-RES-INVFREE at harness_memory.c:237
+BUG-021,CWE-415,Memory,harness_memory.c:257,yes,FN-PARTIAL,FN-PARTIAL,Aggressive reports a related lost-resource effect at the alias assignment
+BUG-022,CWE-401,Memory,harness_memory.c:311,yes,TP,TP,BD-RES-LEAKS at harness_memory.c:316
+BUG-023,CWE-362,Concurrency,harness_concurrency.c:37,yes,FN,FN,No matching race finding
+BUG-024,CWE-366,Concurrency,harness_concurrency.c:56,yes,FN,FN,No matching TOCTOU report. The table_mutex leak at init.c:225 follows a failed acquire/early-return path; not this defect.
+BUG-025,CWE-833,Concurrency,harness_concurrency.c:87,yes,TP,TP,TX model: BD-TRS-ORDER at harness_concurrency.c:75
+BUG-026,CWE-364,Concurrency,harness_concurrency.c:108,yes,TP,TP,TX model: BD-TRS-THRDR at harness_concurrency.c:111
+BUG-027,CWE-362,Concurrency,harness_concurrency.c:134,yes,FN,FN,No matching list race finding
+BUG-028,CWE-667,Concurrency,harness_concurrency.c:153,yes,TP,TP,TX model: BD-TRS-REVLOCK at harness_concurrency.c:155
+BUG-029,CWE-366,Concurrency,harness_concurrency.c:164,yes,TP,TP,TX model: BD-TRS-THRDR at harness_concurrency.c:166
+BUG-030,CWE-366,Concurrency,harness_concurrency.c:190,yes,FN,FN,No matching queue-status or unchecked-read finding
+BUG-031,CWE-476,NULL paths,harness_nullpaths.c:74,no,INVALID,INVALID,Same range check means non-NULL mirror implies non-NULL primary
+BUG-032,CWE-476,NULL paths,harness_nullpaths.c:94,yes,TP,TP,BD-PB-NP at harness_nullpaths.c:96
+BUG-033,CWE-690,NULL paths,harness_nullpaths.c:113,yes,TP,TP,BD-PB-NP at harness_nullpaths.c:115
+BUG-034,CWE-457,NULL paths,harness_nullpaths.c:151,yes,TP,TP,BD-PB-NOTINIT at harness_nullpaths.c:154
+BUG-035,CWE-476,NULL paths,harness_nullpaths.c:166,yes,FN-INDIRECT,FN-INDIRECT,BD-PB-CC flags the late null check as always false; no direct null-dereference finding
+BUG-036,CWE-690,NULL paths,harness_nullpaths.c:184,yes,FN,FN,No matching unchecked-callback finding
+BUG-037,CWE-476,NULL paths,harness_nullpaths.c:200,yes,TP,TP,BD-PB-NOTINIT at harness_nullpaths.c:211
+BUG-038,CWE-476,NULL paths,harness_nullpaths.c:224,yes,TP,TP,BD-PB-NP at harness_nullpaths.c:226
+BUG-039,CWE-129,Taint/bounds,harness_taint.c:56,yes,FN,FN,No matching calibration-table bounds finding
+BUG-040,CWE-787,Taint/bounds,harness_taint.c:71,yes,TP,TP,BD-PB-OVERFWR at harness_taint.c:75
+BUG-041,CWE-120,Taint/bounds,harness_taint.c:86,yes,FN,FN,No matching unbounded-string-copy finding
+BUG-042,CWE-129,Taint/bounds,harness_taint.c:101,yes,TP,TP,BD-PB-ARRAY at harness_taint.c:104
+BUG-043,CWE-787,Taint/bounds,harness_taint.c:116,yes,FN,FN,No matching accumulator-array bounds finding
+BUG-044,CWE-134,Taint/bounds,harness_taint.c:133,yes,FN,FN,No matching tainted-format-string finding
+BUG-045,CWE-680/787,Taint/bounds,harness_taint.c:151,yes,FN,FN,No matching allocation-size/string-copy finding
+BUG-046,CWE-129,Taint/bounds,harness_taint.c:179,yes,TP,TP,BD-PB-ARRAY at harness_taint.c:182
+BUG-047,CWE-457,Uninitialized,harness_uninit.c:41,yes,FN,FN,No finding on pooled frame flags
+BUG-048,CWE-457,Uninitialized,harness_uninit.c:63,yes,TP,TP,BD-PB-NOTINIT at harness_uninit.c:69
+BUG-049,CWE-457,Uninitialized,harness_uninit.c:17,yes,TP,TP,BD-PB-NOTINIT at harness_uninit.c:88
+BUG-050,CWE-457,Uninitialized,harness_uninit.c:127,yes,TP,TP,BD-PB-NOTINIT at harness_uninit.c:130
+BUG-051,CWE-457,Uninitialized,harness_uninit.c:143,yes,FN,FN,No finding on uninitialized CRC entry
+BUG-052,CWE-457,Uninitialized,harness_uninit.c:167,yes,FN,FN,No matching uninitialized stats-field finding

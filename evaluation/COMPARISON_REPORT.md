@@ -6,6 +6,19 @@
 - **PDF:** [`reports/COMPARISON_REPORT.pdf`](reports/COMPARISON_REPORT.pdf)
 - **Detailed candidate outcomes:** [`reports/adjudication/DETECTION_MATRIX.csv`](reports/adjudication/DETECTION_MATRIX.csv)
 
+> **Follow-up, 2026-10-11:** explicit Thorough depth measured **16/50** without
+> ThreadX conventions and **20/50** with them, with analysis timeouts reported.
+> See [`THREADX_THOROUGH_REPORT.md`](THREADX_THOROUGH_REPORT.md).
+> This report and its PDF retain the original 2026-10-08 results. The original
+> Aggressive preset did not explicitly verify Thorough depth.
+>
+> **Further follow-up, 2026-10-11:** enabling all 144 Flow checkers at
+> Thorough/240s raised the TX-aware strict score to **21/50**, newly detecting
+> BUG-023. Adding all 388 shipped MISRA C:2025 checkers did not raise that score
+> further. See [`THREADX_ALLFLOW_MISRA_240_REPORT.md`](THREADX_ALLFLOW_MISRA_240_REPORT.md)
+> for the controlled runs, the clean-state findings, and timeout caveats. The
+> original report and PDF below remain unchanged.
+
 ## Executive summary
 
 Parasoft C/C++test Standard 2026.1.3 completed four scans. Its `builtin://Flow

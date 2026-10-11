@@ -137,3 +137,123 @@ results are committed under `evaluation/reports/sonarqube/`.
   project-backed Vortex code engine is not entitled (403), so no cross-vendor
   TP/FP/FN comparison is possible on the current connection. Sonar Agent
   Essentials or a supported entitled Server connection is required.
+
+## 8. Explicit Thorough depth and ThreadX model follow-up, 2026-10-11
+
+The original Aggressive preset did not explicitly set `depthOfAnalysis`.
+Earlier descriptions of it as a verified maximum/Thorough-depth scan were not
+supported by that configuration. The installed configuration schema labels
+`depthOfAnalysis=4` as **Thorough (slowest)**.
+
+Two separate configurations under `evaluation/configs/` retain Aggressive rules
+and explicitly set depth `4`: `Flow Analysis Aggressive Thorough.properties`
+and `TX_Flow Analysis Aggressive Thorough.properties`. Only the latter adds the
+TX multithreading API. Neither changes resource conventions or source tags.
+
+Each used the original solution/Win32 build scope, `vc_14_5`, and a new workspace.
+All four runs checked 214 files and exited 0:
+
+| Model | State | UTC start | UTC end | XML findings | Harness findings | Analysis timeouts |
+|---|---|---|---|---:|---:|---:|
+| Control | clean | 12:38:30Z | 12:44:16Z | 121 | 7 | 239 |
+| Control | bugged | 12:44:16Z | 12:50:02Z | 143 | 29 | 238 |
+| TX | clean | 12:50:02Z | 12:55:49Z | 297 | 18 | 240 |
+| TX | bugged | 12:55:49Z | 13:01:43Z | 324 | 40 | 240 |
+
+Timeout strategy remained the default **time, 60 seconds per hotspot**. Reports
+are therefore completed CLI runs, not proof of exhaustive path exploration.
+The control scored **16/50 strict TP**, and TX scored **20/50 strict TP**.
+See `THREADX_THOROUGH_REPORT.md` and `reports/threadx-thorough/` for adjudication,
+configuration/raw-report hashes, and full timestamps.
+
+Raw evidence remains at
+`C:\projects\parasoft-vs-SQ\reports\thorough-20261011T123829Z`.
+The preliminary `tx-aware-20261011T123457Z` attempt before the explicit-depth
+clarification is retained locally and is not scored here.
+
+## 9. TX Thorough with 360-second hotspot limit, 2026-10-11
+
+`evaluation/configs/TX_Flow Analysis Aggressive Thorough 360s.properties`
+retains the TX model and depth `4`, explicitly sets timeout strategy `time`,
+and increases `hotSpotTimeoutSeconds` from the default 60 to **360**.
+Both new console logs confirm the active 360-second limit.
+
+Same source commits, `vc_14_5`, solution scope, and 214 checked files;
+separate workspaces and reports:
+
+| State | UTC start | UTC end | Exit | XML findings | Harness findings | Timeouts |
+|---|---|---|---:|---:|---:|---:|
+| clean | 13:30:56Z | 13:53:30Z | 0 | 317 | 20 | 183 |
+| bugged | 13:53:30Z | 14:15:53Z | 0 | 344 | 49 | 182 |
+
+Strict detections remain **20/50**, with **30 strict FN**. The added diagnostics
+were reviewed and do not detect additional planted root causes. Raw evidence is
+retained at `C:\projects\parasoft-vs-SQ\reports\tx-thorough-360-20261011T133054Z`.
+See `THREADX_360_REPORT.md` and `reports/threadx-thorough-360/` for the full
+comparison, row-level reviews, and hashes. Remaining timeouts are disclosed,
+not treated as a completed exhaustive analysis.
+
+## 10. All Flow checkers and MISRA C:2025 at Thorough/240s, 2026-10-11
+
+This controlled follow-up starts from the same immutable `harness-clean`
+(`844260e1497fecffeb05c41cdf94e57044afee6e`) and `bugged`
+(`9d6995958d8e7618e570e4724083e5a3edfe934b`) commits and retains the same
+ThreadX custom multithreading API model.
+
+The installed Flow schema contains 144 checker IDs. Both configurations enable
+all 144, the 25 available aggressive/unvalidated-reporting options, and the two
+additional NOTINIT reporting options
+`BD-PB-NOTINIT-reportIfPartialNoninitializedCopied` and
+`BD-PB-NOTINIT-reportOnPotentiallyNonInitArrayElement`. The second configuration
+also enables all 388 checker IDs in the shipped `MISRA C 2025.properties`.
+Checker IDs and the MISRA-to-underlying-checker map are inventoried in
+`configs/ALL_FLOW_MISRA_240_INVENTORY.csv`.
+
+Every scan explicitly sets `depthOfAnalysis=4` (Thorough),
+`hotSpotTimeoutStrategy=time`, and `hotSpotTimeoutSeconds=240`. Runs use fresh
+workspaces, the same `vc_14_5` compiler and
+`azure_rtos.sln@Release|Win32` input; the CLI reports 214 files checked.
+
+| Profile | State | Start UTC | End UTC | Exit | XML findings | Harness findings | Flow timeouts |
+|---|---|---|---|---:|---:|---:|---:|
+| All Flow | clean | 15:13:35Z | 15:29:44Z | 0 | 324 | 26 | 187 |
+| All Flow | bugged | 15:29:45Z | 15:45:40Z | 0 | 354 | 49 | 183 |
+| All Flow + MISRA C:2025 | clean | 15:45:41Z | 16:08:18Z | 0 | 4,661 | 558 | 210 |
+| All Flow + MISRA C:2025 | bugged | 16:08:19Z | 16:29:59Z | 0 | 4,745 | 615 | 206 |
+
+All Flow rules produce **21/50 strict planted-defect TPs**. Enabling every rule
+newly identifies BUG-023 through `BD-TRS-MLOCK`; its matching
+`MISRAC2025-DIR_5_1-a` diagnostic is the same root cause and is deduplicated.
+The additional MISRA checkers do not raise the strict score beyond 21/50. MISRA
+compliance diagnostics are not counted as planted-defect detections without a
+source-level match to the defect's root cause.
+
+The Flow-only profile has 26 clean harness findings, all individually reviewed
+in `reports/threadx-allflow-misra-240/CLEAN_FLOW_REVIEW.csv`. The combined
+profile reports 558 clean harness entries (505 `StdViol`, 53 `FlowViol`), many
+of which are compliance findings or aliases; they are not 558 unique defects.
+The bugged combined profile reports 615 harness entries. High diagnostic volume
+does not imply increased defect recall.
+
+The export script, per-candidate matrix, four normalized findings CSVs, scan
+summary and raw-report hashes are in `evaluation/scripts/` and
+`evaluation/reports/threadx-allflow-misra-240/`. Raw XML and console logs remain
+local at `C:\projects\parasoft-vs-SQ\reports\allflow-misra240-20261011T151333Z`.
+Despite exit code 0, the scans still report 183–210 hotspot timeouts; results
+are not claimed exhaustive. The historical PDF and presentation have not been
+refreshed.
+
+## 11. Reproducing the Parasoft run and reports
+
+`PARASOFT_RUN_GUIDE.md` documents the required Parasoft/Visual Studio licenses,
+the immutable source worktrees, how to run the four controlled scans, and how
+to export the reviewed matrix. `scripts/run-threadx-allflow-misra-240.ps1` is
+the checked-in PowerShell driver; it records source commits and config hashes
+and keeps each Parasoft workspace separate. Parasoft creates `report.html`,
+`report.xml`, and a console log per run. The Python exporter writes normalized
+finding CSVs and the adjudicated per-candidate matrix to a new output directory.
+
+The SonarQube DEEP code comparison is intentionally pending the license
+entitlement; the previously recorded 403 is not a zero-finding result. No
+Sonar code result should be added to the comparison until the licensed scan has
+completed on both immutable source states.

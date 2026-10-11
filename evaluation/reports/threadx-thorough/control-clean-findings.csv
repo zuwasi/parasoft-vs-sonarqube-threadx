@@ -1,0 +1,122 @@
+Rule,File,Line,Message,Severity,ViolationId
+BD-PB-MEMOPT,azure_rtos/sample_threadx/harness/harness_sizearith.c,51,"Call to ""memcpy"" may be optimized out by the compiler as the ""dst"" buffer is not used later",2,b597b7df-4d15-3bdd-b63b-427c4e9a1153
+BD-PB-OVERFRD,azure_rtos/sample_threadx/harness/harness_sizearith.c,161,"Overflow when reading from buffer ""sa_src"" (UCHAR[128], 128 bytes large). Number of bytes read 0 <= msg_len <= 65535",1,24976c52-3a0a-3c96-81e5-ff5beaebb98e
+BD-PB-CC,azure_rtos/sample_threadx/harness/harness_sizearith.c,260,"Condition ""n >= 64"" always evaluates to false",2,98cad66d-34ff-32ce-872c-784579270bd5
+BD-PB-MEMOPT,azure_rtos/sample_threadx/harness/harness_sizearith.c,277,"Call to ""memcpy"" may be optimized out by the compiler as the ""dst"" buffer is not used later",2,75284911-41ea-3896-83e9-405731694fff
+BD-PB-CC,azure_rtos/sample_threadx/harness/harness_memory.c,40,"Condition ""frame_send(...) != 0"" always evaluates to true",2,13d9715d-006e-39f6-93da-b227ec1a67a6
+BD-PB-VOVR,azure_rtos/sample_threadx/harness/harness_memory.c,61,"Value of ""status"" is never used",3,5452fb0a-57ca-36ae-9096-faaaae35291e
+BD-PB-MEMOPT,azure_rtos/sample_threadx/harness/harness_taint.c,71,"Call to ""memcpy"" may be optimized out by the compiler as the ""dst"" buffer is not used later",2,3b90b7da-3230-308e-a11c-577b12a81f25
+BD-PB-PTRCMP,azure_rtos/tx/../../../../../common/src/txe_thread_create.c,160,"Two possibly unrelated pointers ""stack_start"" and ""next_thread->tx_thread_stack_start"" are compared",2,1ad51e6d-68da-377e-b0e3-c213c51343d2
+BD-PB-PTRCMP,azure_rtos/tx/../../../../../common/src/txe_thread_create.c,163,"Two possibly unrelated pointers ""stack_start"" and ""next_thread->tx_thread_stack_end"" are compared",2,3432d7ef-71bf-37e5-8a71-afd66a6cdc45
+BD-PB-PTRCMP,azure_rtos/tx/../../../../../common/src/txe_thread_create.c,176,"Two possibly unrelated pointers ""stack_end"" and ""next_thread->tx_thread_stack_start"" are compared",2,894c005a-3de2-3813-8f36-67e89e5c9a80
+BD-PB-PTRCMP,azure_rtos/tx/../../../../../common/src/txe_thread_create.c,179,"Two possibly unrelated pointers ""stack_end"" and ""next_thread->tx_thread_stack_end"" are compared",2,46c41f8a-a9e1-32d2-b269-bb54e70409b7
+BD-PB-CC,azure_rtos/tx/../../../../../common/src/tx_byte_pool_search.c,142,"Condition ""first_free_block_found == 0"" always evaluates to true",2,6a250521-a8c8-3eaf-bfc1-38e07950d564
+BD-PB-CC,azure_rtos/tx/../../../../../common/src/tx_byte_pool_search.c,215,"Condition ""examine_blocks != 0"" always evaluates to true",2,9e28cf2d-63db-330f-bcef-8163100c01cc
+BD-PB-CC,azure_rtos/tx/../../../../../common/src/tx_byte_pool_search.c,240,"Condition ""examine_blocks != 0"" always evaluates to true",2,63f4a90b-c2ec-36a6-a0c7-17d9a5bbee2a
+BD-PB-CC,azure_rtos/tx/../../../../../common/src/tx_byte_pool_search.c,315,"Condition ""current_ptr == pool_ptr->tx_byte_pool_search"" always evaluates to true",2,245a0fe4-1a51-3a11-af8c-44662f955428
+BD-PB-PTRCMP,azure_rtos/tx/../../../../../common/src/tx_byte_release.c,200,"Two possibly unrelated pointers ""work_ptr"" and ""pool_ptr->tx_byte_pool_search"" are compared",2,17348391-6576-3ed9-9810-42c1f5bab7e7
+BD-PB-CC,azure_rtos/tx/../../../../../common/src/tx_byte_release.c,213,"Condition ""pool_ptr->tx_byte_pool_suspended_count != 0"" always evaluates to true",2,d4306609-6338-36ad-98a5-f506448d6cbf
+BD-PB-CC,azure_rtos/tx/../../../../../common/src/tx_mutex_cleanup.c,301,"Condition ""mutex_ptr != 0"" always evaluates to false",2,22b0fd9e-1fb1-3401-b64d-e07512d4f719
+BD-PB-CC,azure_rtos/tx/../../../../../common/src/tx_mutex_put.c,144,"Condition ""status == 32"" always evaluates to true",2,889cf495-4f96-3c2b-81eb-e9a189bfc47a
+BD-PB-CC,azure_rtos/tx/../../../../../common/src/tx_mutex_put.c,230,"Condition ""status == 32"" always evaluates to true",2,350f1c05-d412-323c-9e59-38369601be85
+BD-PB-CC,azure_rtos/tx/../../../../../common/src/tx_mutex_put.c,312,"Condition ""mutex_ptr->tx_mutex_inherit == 1"" always evaluates to false",2,e6d22a76-49d3-3174-8191-6ebfbdf63164
+BD-PB-CC,azure_rtos/tx/../../../../../common/src/tx_mutex_put.c,414,"Condition ""mutex_ptr->tx_mutex_inherit == 1"" always evaluates to false",2,57546339-e0d7-3000-a60c-e022cf66dbc2
+BD-PB-INTWRAP,azure_rtos/tx/../../../../../common/src/tx_thread_create.c,185,"Integer underflow: value of (stack_size - 1) will be 4,294,967,295 instead of -1. Result type range: [0..2^32)",3,9b06a48d-47a9-3525-bb00-12dfbeb87078
+BD-PB-CC,azure_rtos/tx/../../../../../common/src/tx_thread_delete.c,108,"Condition ""status == 0"" always evaluates to true",2,1d515706-0a15-3a6a-b6dd-aa05e6d8cafe
+BD-PB-CC,azure_rtos/tx/../../../../../common/src/tx_thread_delete.c,126,"Condition ""status == 0"" always evaluates to true",2,e1c0f70a-396e-37e3-8938-c3a32e6c77f3
+BD-PB-VOVR,azure_rtos/tx/../../../../../common/src/tx_thread_priority_change.c,137,"Value of ""original_priority"" is never used",3,47c1b224-8700-31f4-a43c-abf9716aab66
+BD-TRS-THRDR,azure_rtos/tx/../../../../../common/src/tx_thread_shell_entry.c,82,"The global variable ""_tx_thread_current_ptr"" is used without holding a lock",3,7460b466-8543-375a-8838-e080e24b2a33
+BD-PB-PTRCMP,azure_rtos/tx/../../../../../common/src/tx_thread_stack_analyze.c,107,"Two possibly unrelated pointers ""stack_highest"" and ""stack_lowest"" are compared",2,6cfa851a-7a4a-397d-98ce-1cc7d26087e5
+BD-PB-NP,azure_rtos/tx/../../../../../common/src/tx_thread_system_suspend.c,122,"""thread_ptr"" may possibly be null",1,ff376a57-1eca-31c7-b4b2-a358f799f163
+BD-TRS-THRDR,azure_rtos/tx/../../../../../common/src/tx_thread_time_slice.c,84,"The global variable ""_tx_thread_current_ptr"" is used without holding a lock",3,12ea33a1-c80e-3e57-aa4d-0f4bec444012
+BD-PB-PTRCMP,azure_rtos/tx/../../../../../common/src/tx_timer_deactivate.c,109,"Two possibly unrelated pointers ""list_head"" and ""_tx_timer_list_start"" are compared",2,b7c873ab-36ae-3858-95cf-a9e0cb95e5c5
+BD-PB-PTRCMP,azure_rtos/tx/../../../../../common/src/tx_timer_deactivate.c,113,"Two possibly unrelated pointers ""list_head"" and ""_tx_timer_list_end"" are compared",2,37467c66-0e44-36a4-b5c6-7dad2df2dc5b
+BD-PB-PTRCMP,azure_rtos/tx/../../../../../common/src/tx_timer_deactivate.c,131,"Two possibly unrelated pointers ""list_head"" and ""_tx_timer_current_ptr"" are compared",2,4c95cf46-9415-3a49-a136-659ec2f9164d
+BD-PB-PTRSUB,azure_rtos/tx/../../../../../common/src/tx_timer_deactivate.c,136,"Pointers ""list_head"" and ""_tx_timer_current_ptr"", which may not address the elements of the same array, are subtracted",2,07a9e901-efa4-35bd-9dcc-2a96bbcff35e
+BD-PB-PTRSUB,azure_rtos/tx/../../../../../common/src/tx_timer_deactivate.c,142,"Pointers ""list_head"" and ""_tx_timer_list_start"", which may not address the elements of the same array, are subtracted",2,c00f06d3-abef-3a86-aabd-e11a714d87f0
+BD-PB-PTRSUB,azure_rtos/tx/../../../../../common/src/tx_timer_deactivate.c,144,"Pointers ""_tx_timer_list_end"" and ""_tx_timer_current_ptr"", which may not address the elements of the same array, are subtracted",2,4b7f9ed9-4a47-3e22-af0e-2659c89675e5
+BD-PB-PTRCMP,azure_rtos/tx/../../../../../common/src/tx_timer_info_get.c,125,"Two possibly unrelated pointers ""internal_ptr->tx_timer_internal_list_head"" and ""_tx_timer_list_start"" are compared",2,65689d86-f11d-32f5-b9cf-2eab4e9fcc4d
+BD-PB-PTRCMP,azure_rtos/tx/../../../../../common/src/tx_timer_info_get.c,129,"Two possibly unrelated pointers ""internal_ptr->tx_timer_internal_list_head"" and ""_tx_timer_list_end"" are compared",2,8465b0f4-2082-3c3d-87f6-1dd4543d630e
+BD-PB-PTRCMP,azure_rtos/tx/../../../../../common/src/tx_timer_info_get.c,148,"Two possibly unrelated pointers ""internal_ptr->tx_timer_internal_list_head"" and ""_tx_timer_current_ptr"" are compared",2,3bfcdb1d-3449-3c87-9b9d-4f74f855871d
+BD-PB-PTRSUB,azure_rtos/tx/../../../../../common/src/tx_timer_info_get.c,153,"Pointers ""list_head"" and ""_tx_timer_current_ptr"", which may not address the elements of the same array, are subtracted",2,de567cca-77d3-3143-96c6-f042a329b969
+BD-PB-PTRSUB,azure_rtos/tx/../../../../../common/src/tx_timer_info_get.c,159,"Pointers ""list_head"" and ""_tx_timer_list_start"", which may not address the elements of the same array, are subtracted",2,9de5227a-d183-3641-a083-b05a9ee11ca7
+BD-PB-PTRSUB,azure_rtos/tx/../../../../../common/src/tx_timer_info_get.c,161,"Pointers ""_tx_timer_list_end"" and ""_tx_timer_current_ptr"", which may not address the elements of the same array, are subtracted",2,e6ca95c1-3c22-3a33-a92c-5836e13cb1f7
+BD-PB-PTRCMP,azure_rtos/tx/../../../../../common/src/tx_timer_system_activate.c,120,"Two possibly unrelated pointers ""timer_list"" and ""_tx_timer_list_end"" are compared",2,68efca07-63ca-35ec-97f1-8c35c3fff762
+BD-PB-PTRSUB,azure_rtos/tx/../../../../../common/src/tx_timer_system_activate.c,124,"Pointers ""timer_list"" and ""_tx_timer_list_end"", which may not address the elements of the same array, are subtracted",2,79150457-78a4-3c7b-ac3d-ba793136c853
+BD-PB-CHECKRETGEN,azure_rtos/tx/../../src/tx_initialize_low_level.c,249,"Value returned from method ""malloc"" should be checked",2,957692e3-bb67-3a9d-93d7-e2ce3b6a9fbc
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_initialize_low_level.c,413,"The global variable ""_tx_win32_exiting"" is used without holding a lock",3,c0775f19-694b-3ce1-84a5-6077e13320ff
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_initialize_low_level.c,448,"The global variable ""_tx_win32_exiting"" is used without holding a lock",3,e9e17c8a-ccdb-3ba4-8e70-a75994f0a093
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_initialize_low_level.c,462,"The global variable ""_tx_win32_timer_handle"" is used without holding a lock",3,f5748b60-3494-3b9d-b456-17dcbffe16ef
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_initialize_low_level.c,465,"The global variable ""_tx_win32_exiting"" is used without holding a lock",3,878ce79a-1ddf-3d0e-9eee-3a6171cf7dcd
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_initialize_low_level.c,468,"The global variable ""_tx_win32_exiting"" is used without holding a lock",3,d4f60b52-f2c9-31f8-94a2-c14563d00981
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_initialize_low_level.c,496,"The global variable ""_tx_win32_timer_handle"" is used without holding a lock",3,452f6974-c985-3322-85df-65178aeab4f3
+BD-TRS-DIFCS,azure_rtos/tx/../../src/tx_thread_context_restore.c,174,"""_tx_win32_timer_waiting"" is used in two critical sections in context of single method, using one critical section will improve atomicity of operation",2,b4605d97-326d-3128-96c0-62c07b3ab5a1
+BD-TRS-LOCK,azure_rtos/tx/../../src/tx_thread_context_restore.c,179,Unreleased lock: critical_section->tx_win32_critical_section_lock,1,0ad17336-b1e5-3922-92ee-6d40136bcb5b
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_context_save.c,84,"The global variable ""_tx_win32_critical_section"" is used without holding a lock",3,a4c1ec96-9d05-36fe-9c45-a672b3694d25
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_context_save.c,90,"The global variable ""_tx_thread_current_ptr"" is used without holding a lock",3,ab6078c9-7f9f-3671-beb5-cbd725d63531
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_context_save.c,93,"The global variable ""_tx_thread_system_state"" is used without holding a lock",3,8e97d416-f235-3b75-84cb-1fe81e3cd27f
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_context_save.c,99,"The global variable ""_tx_win32_exiting"" is used without holding a lock",3,8e9c1aa7-522c-3027-b04c-fab450dddc89
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_context_save.c,101,"The global variable ""_tx_win32_critical_section"" is used without holding a lock",3,bc7da6e5-7489-3ac9-ba5a-674f80f24441
+BD-TRS-TSHL,azure_rtos/tx/../../src/tx_thread_context_save.c,110,Call to a blocking function inside a critical section: SuspendThread,1,47607de2-1942-3897-9c8a-466ea912c946
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_context_save.c,118,"The global variable ""_tx_thread_system_state"" is used without holding a lock",3,ee42d463-22fb-3f0c-8b28-1c04bef1e4ab
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_context_save.c,121,"The global variable ""_tx_win32_critical_section"" is used without holding a lock",3,a3584f31-3822-3043-8c24-c8d3e41bc70e
+BD-TRS-LOCK,azure_rtos/tx/../../src/tx_thread_context_save.c,122,Unreleased lock: critical_section->tx_win32_critical_section_lock,1,09263ee7-72d5-320b-b5c7-31776e29bc4b
+BD-PB-VOVR,azure_rtos/tx/../../src/tx_thread_interrupt_control.c,51,"Value of ""previous_posture"" is never used",3,b2001b53-0a30-3190-a1b5-37ff9b3b66fd
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_interrupt_control.c,103,"The global variable ""_tx_win32_critical_section"" is used without holding a lock",3,0c727f99-12e5-3864-a31b-696996840bdf
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_interrupt_control.c,123,"The global variable ""_tx_thread_current_ptr"" is used without holding a lock",3,f5f5e83f-a50f-3fb3-b8b2-6fb32eaf1cf3
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_interrupt_control.c,136,"The global variable ""_tx_win32_critical_section"" is used without holding a lock",3,9ac9f10a-9e64-3f80-9a2f-bbbf3f64f94b
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_interrupt_control.c,143,"The global variable ""_tx_win32_critical_section"" is used without holding a lock",3,20fff6c5-014d-31be-9add-db98fb3613b0
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_interrupt_control.c,157,"The global variable ""_tx_thread_system_state"" is used without holding a lock",3,150f72ea-e2d4-3767-95be-7b67c9630c33
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_interrupt_control.c,174,"The global variable ""_tx_win32_global_int_disabled_flag"" is used without holding a lock",3,b34622ee-df81-3777-84e1-81fea80f505e
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_interrupt_control.c,194,"The global variable ""_tx_thread_current_ptr"" is used without holding a lock",3,747c7bd5-c5e6-3503-b8a3-79b045a6b76b
+BD-TRS-LOCK,azure_rtos/tx/../../src/tx_thread_interrupt_control.c,200,Unreleased lock: critical_section->tx_win32_critical_section_lock,1,a94d9a48-22f8-353e-9956-dba7b509e7e2
+BD-TRS-DIFCS,azure_rtos/tx/../../src/tx_thread_schedule.c,99,"""_tx_thread_system_state"" is used in two critical sections in context of single method, using one critical section will improve atomicity of operation",2,935c4325-6b05-3ba3-be73-cb88a9b81052
+BD-TRS-DIFCS,azure_rtos/tx/../../src/tx_thread_schedule.c,99,"""_tx_thread_execute_ptr"" is used in two critical sections in context of single method, using one critical section will improve atomicity of operation",2,d90767e2-fb27-3bd3-9ece-f35a56555a83
+BD-TRS-TSHL,azure_rtos/tx/../../src/tx_thread_schedule.c,181,Call to a blocking function inside a critical section: WaitForSingleObject,1,c7d544ea-153c-335c-a423-632c48b89623
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_schedule.c,228,"The global variable ""_tx_win32_critical_section""(referenced by the variable *critical_section) is used without holding a lock",3,3734e333-075d-381d-89b7-24bb5f291b8c
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_schedule.c,232,"The global variable ""_tx_win32_critical_section""(referenced by the variable *critical_section) is used without holding a lock",3,0bd2caac-e794-3b25-897a-158c3abf44dc
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_schedule.c,256,"The global variable ""_tx_win32_critical_section""(referenced by the variable *critical_section) is used without holding a lock",3,b4ea846d-84ba-332f-9ca4-3309680e2d33
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_schedule.c,260,"The global variable ""_tx_win32_critical_section""(referenced by the variable *critical_section) is used without holding a lock",3,3b7e55b2-cc5f-3120-bb3b-1aebf4a8c33e
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_schedule.c,264,"The global variable ""_tx_win32_critical_section""(referenced by the variable *critical_section) is used without holding a lock",3,24ddc4e9-7d0b-39ed-8c4c-c56d157f407f
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_schedule.c,267,"The global variable ""_tx_win32_critical_section""(referenced by the variable *critical_section) is used without holding a lock",3,81ed4403-7ec8-3053-8b03-7238616a6637
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_schedule.c,271,"The global variable ""_tx_win32_critical_section""(referenced by the variable *critical_section) is used without holding a lock",3,fe54b938-9440-3ae2-951c-0616371a7f77
+BD-TRS-REVLOCK,azure_rtos/tx/../../src/tx_thread_schedule.c,274,"The ""critical_section->tx_win32_critical_section_lock"" lock is released, but it has not been acquired",3,4c3920aa-da23-3c53-aeeb-433d9ccc43b3
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_schedule.c,282,"The global variable ""_tx_win32_system_error"" is used without holding a lock",3,06a7e83a-d34a-3652-b0df-c652840fa336
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_schedule.c,291,"The global variable ""_tx_win32_critical_section""(referenced by the variable *critical_section) is used without holding a lock",3,387535aa-9a33-3e36-8591-5595fc74ff60
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_schedule.c,295,"The global variable ""_tx_win32_critical_section""(referenced by the variable *critical_section) is used without holding a lock",3,a605c833-c6bd-33f3-b6e4-ce33353142d1
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_schedule.c,299,"The global variable ""_tx_win32_critical_section""(referenced by the variable *critical_section) is used without holding a lock",3,a0360a18-fd6a-3c7b-a967-0178c34c5510
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_schedule.c,302,"The global variable ""_tx_win32_critical_section""(referenced by the variable *critical_section) is used without holding a lock",3,a4254423-7987-3ef3-9d4f-a4ba2c45c529
+BD-TRS-REVLOCK,azure_rtos/tx/../../src/tx_thread_schedule.c,305,"The ""critical_section->tx_win32_critical_section_lock"" lock is released, but it has not been acquired",3,a429262b-cbc1-3a76-8925-491f995244fc
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_schedule.c,312,"The global variable ""_tx_win32_system_error"" is used without holding a lock",3,b3cfb4d9-09a0-3392-a79a-3e2501a98d14
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_stack_build.c,183,"The variable ""thread_ptr"" is used without holding a lock",3,7e4d60ca-0225-3178-b847-d9fff5d05dbc
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_stack_build.c,188,"The variable ""thread_ptr"" is used without holding a lock",3,f3620b1d-2de5-3fac-a3c0-5ba4e3bfbe3a
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_stack_build.c,197,"The variable ""thread_ptr"" is used without holding a lock",3,e56e5735-fefd-3cd1-893f-9bf01e84418a
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_stack_build.c,203,"The variable ""thread_ptr"" is used without holding a lock",3,59e667e7-8ed1-3fdc-8ae4-02e17d833363
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_stack_build.c,209,"The global variable ""_tx_win32_critical_section"" is used without holding a lock",3,9348487e-c756-3d18-9b10-b486979fc44d
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_stack_build.c,213,"The global variable ""_tx_thread_current_ptr"" is used without holding a lock",3,8dd1488d-1550-3ad2-b3df-1199573d63df
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_stack_build.c,217,"The global variable ""_tx_win32_critical_section"" is used without holding a lock",3,9a43747f-2ed5-3c4e-b5e7-fb2b6a227bda
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_thread_stack_build.c,220,"The global variable ""_tx_win32_critical_section"" is used without holding a lock",3,d057dec5-57b0-3fcf-91d8-c496983e58f6
+BD-TRS-TSHL,azure_rtos/tx/../../src/tx_thread_system_return.c,180,Call to a blocking function inside a critical section: WaitForSingleObject,1,69892b64-c584-3101-9763-5a63d0d6c7a7
+BD-TRS-DIFCS,azure_rtos/tx/../../src/tx_thread_system_return.c,197,"""_tx_thread_current_ptr"" is used in two critical sections in context of single method, using one critical section will improve atomicity of operation",2,bfa8a27a-e113-32cd-83be-9ab0b5bfc3a2
+BD-PB-CC,azure_rtos/tx/../../src/tx_thread_system_return.c,202,"Condition ""!temp_thread_ptr"" always evaluates to true",2,421acce9-b343-3033-9983-328939ef5203
+BD-PB-NP,azure_rtos/tx/../../src/tx_thread_system_return.c,219,"""_tx_thread_current_ptr"" may possibly be null",1,89ae45e0-1a4c-3157-9e58-9705755ba3a6
+BD-TRS-LOCK,azure_rtos/tx/../../src/tx_thread_system_return.c,225,Unreleased lock: critical_section->tx_win32_critical_section_lock,1,fdae6735-55a7-3bf4-b05e-7db3f977dc54
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,77,"The global variable ""_tx_win32_critical_section"" is used without holding a lock",3,cffc88e5-191b-3c73-a975-d26c5b2cc472
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,83,"The global variable ""_tx_timer_system_clock"" is used without holding a lock",3,cec4b07a-b85c-3a10-afef-f5866cef4ef4
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,86,"The global variable ""_tx_timer_time_slice"" is used without holding a lock",3,896d190c-0a1e-344f-8082-ee2a4882739c
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,90,"The global variable ""_tx_timer_time_slice"" is used without holding a lock",3,d4a11fe1-40e9-36fc-a685-44101f7adcad
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,93,"The global variable ""_tx_timer_time_slice"" is used without holding a lock",3,1cc54fed-5d25-3183-9efb-c27f2f5cb19d
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,97,"The global variable ""_tx_timer_expired_time_slice"" is used without holding a lock",3,859698d7-b254-3240-8442-45180d7dce03
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,102,"The global variable ""_tx_timer_current_ptr"" is used without holding a lock",3,f383955d-1e06-329d-97f0-6e95860caad4
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,106,"The global variable ""_tx_timer_expired"" is used without holding a lock",3,323f4625-1f54-3ab6-a45a-c3b16f49c9e4
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,112,"The global variable ""_tx_timer_current_ptr"" is used without holding a lock",3,e9bb689a-aafc-32e2-a9dd-89a5a15e5748
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,115,"The global variable ""_tx_timer_list_end"" is used without holding a lock",3,ae9efc7f-a4bc-39ce-89be-16e4e730aa29
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,115,"The global variable ""_tx_timer_current_ptr"" is used without holding a lock",3,2fb5c6f3-63a1-3d7a-9179-071bf4f30550
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,119,"The global variable ""_tx_timer_current_ptr"" is used without holding a lock",3,3ea4d163-c5be-32b1-a305-f4649a916fff
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,119,"The global variable ""_tx_timer_list_start"" is used without holding a lock",3,6704f7df-7018-38be-b8c9-57021cd967db
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,124,"The global variable ""_tx_timer_expired"" is used without holding a lock",3,3d7b9f93-3722-3f54-a795-174eac51d6fb
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,124,"The global variable ""_tx_timer_expired_time_slice"" is used without holding a lock",3,ab18a9b5-41a1-3f12-b046-6c822b9e57a3
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,128,"The global variable ""_tx_timer_expired"" is used without holding a lock",3,25a0f398-5e31-368a-b24b-65ef15cc6e61
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,136,"The global variable ""_tx_timer_expired_time_slice"" is used without holding a lock",3,076bc7ce-a355-337f-b1d7-b823a533a066
+BD-TRS-THRDR,azure_rtos/tx/../../src/tx_timer_interrupt.c,145,"The global variable ""_tx_win32_critical_section"" is used without holding a lock",3,b2bd0eca-3e2c-3891-ae56-f096a9f71dcb
+BD-TRS-LOCK,azure_rtos/tx/../../src/tx_timer_interrupt.c,146,Unreleased lock: critical_section->tx_win32_critical_section_lock,1,3e16d31d-2d5e-34dc-8b32-5d7ebdcf2142
